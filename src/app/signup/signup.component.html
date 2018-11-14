@@ -1,0 +1,70 @@
+<div class="signup-wrapper">
+  <div class="row no-gutters signup-content">
+    <div class="col-md-3 d-none d-md-flex ads-box">
+      <img src="../../assets/img/travel.png" alt="">
+      <a routerLink="/">Sorium</a>
+    </div>
+    <form class="col-12 col-md-9 signup-box" [formGroup]="signupForm" (ngSubmit)="signup()">
+      <div class="top-logo d-flex d-md-none">
+        <img src="../../assets/img/sorium.png" routerLink="/">
+      </div>
+      <h2 class="text-md-left text-center">Đăng ký</h2>
+      <table>
+        <tr>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Họ" formControlName="firstName">
+              <mat-error *ngIf="firstName.invalid && firstName.touched">
+                Vui lòng điền họ của bạn
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Tên" formControlName="lastName">
+              <mat-error *ngIf="lastName.invalid && lastName.touched">
+                Vui lòng điền tên của bạn
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <mat-form-field>
+              <input matInput placeholder="Email" formControlName="email">
+              <mat-hint align="end">Ví dụ: sorium@gmail.com</mat-hint>
+              <mat-error *ngIf="email.invalid && email.touched">
+                Email của bạn chưa đúng
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <mat-form-field>
+              <input matInput placeholder="Mật khẩu" formControlName="password" [type]="hide ? 'password' : 'text'">
+              <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-hint align="end">Ít nhất 6 ký tự trong đó có 1 số hoặc 1 chữ</mat-hint>
+              <mat-error *ngIf="password.invalid && password.touched">
+                Mật khẩu của bạn chưa đúng
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+
+      <button mat-flat-button [disabled]="signupForm.invalid" type="submit">
+        <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+        <p *ngIf="!isLoading">Đăng ký</p>
+      </button>
+
+      <div class="actions">
+
+        <p>Thực hiện đăng ký đồng nghĩa với việc bạn chấp nhận tuân theo <a routerLink="">Điều khoản sử dụng</a> và <a routerLink="">Chính sách bảo mật</a> của Sorium.</p>
+        <p>Đã có tài khoản? <a routerLink="/dang-nhap">Đăng nhập ngay</a></p>
+
+      </div>
+    </form>
+  </div>
+
+</div>

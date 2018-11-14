@@ -1,0 +1,41 @@
+.profile-wrapper{
+  background: #f9f9f9;
+  .user-profile{
+    width: 100%;
+    box-shadow:0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    .user-avatar{
+      width: 200px;
+      height: 200px;
+      margin: auto;
+      border-radius: 50%;
+      overflow: hidden;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+  }
+}
+
+mat-icon{
+  margin-right: .5rem;
+}
+.personal-info .mat-expansion-panel-header-title,
+.personal-info .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.personal-info .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mat-tab-body-content{
+  padding-bottom: 5px;
+}
+
+p{
+  margin-bottom: 0;
+}

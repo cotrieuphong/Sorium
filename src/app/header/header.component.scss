@@ -1,0 +1,109 @@
+@import "../../scss/variables.scss";
+header{
+  display: block;
+  box-shadow: 0 .1rem .1rem rgba(0,0,0,.1);
+  .main-nav{
+    background: #FFFFFF;
+    a{
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .brand{
+      height: 2.5rem;
+      border-right: 1px solid $cl-gray;
+      img{
+        height: 100%;
+        vertical-align: baseline;
+      }
+    }
+    @media (max-width: 767px){
+      .brand{
+        height: 1.8rem;
+      }
+    }
+    .collapse-nav{
+      display: flex;
+      width: 100%;
+    }
+  }
+  &.sticky-top{
+    position: sticky;
+    top: 0;
+    z-index: 400;
+  }
+}
+.sticky-search-wrapper{
+  background: #515b62;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 600;
+  .sticky-search{
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    .mat-form-field-wrapper{
+      margin-bottom: -15px;
+    }
+    .mat-form-field-infix{
+      border-top: 0;
+      margin-top: 10px;
+    }
+    mat-form-field{
+      flex: 1;
+      padding: 0 .5rem;
+      background: #fff;
+      .mat-form-field-underline{
+        background: #fff;
+      }
+    }
+    .mat-form-field-prefix{
+      align-self: flex-end;
+    }
+    .input-icon{
+      font-size: 2rem;
+      color: #aaa;
+      align-self: flex-end
+    }
+    button{
+      align-self: stretch
+    }
+  }
+}
+.profile-icon{
+  display: flex;
+  flex-flow: row nowrap;
+  .profile-img{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-self: center;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+  }
+  p{
+    margin-bottom: 0;
+    align-self: center;
+  }
+}
+
+.relative-dialog .mat-dialog-container{
+  position: relative;
+  padding: 0;
+  height: auto;
+  overflow: hidden;
+}
+/* @media (max-width: 767px){
+  .relative-dialog .mat-dialog-container{
+    width: 120%;
+  }
+} */

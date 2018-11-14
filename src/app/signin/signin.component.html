@@ -1,0 +1,40 @@
+<div class="signin-wrapper">
+  <div class="row no-gutters signin-content shadow">
+    <div class="col-md-4 d-none d-md-flex ads-box">
+      <img src="../../assets/img/travel.png" alt="">
+      <a routerLink="/">Sorium</a>
+    </div>
+    <form class="col-12 col-md-8 signin-box"  [formGroup]="signinForm" (ngSubmit)="signin()">
+
+      <div class="top-logo d-flex d-md-none">
+        <img src="../../assets/img/sorium.png" routerLink="/">
+      </div>
+      <h2 class="text-md-left text-center">Đăng nhập</h2>
+
+      <mat-form-field>
+        <input matInput placeholder="Email" formControlName="email">
+        <mat-hint align="end">Ví dụ: sorium@gmail.com</mat-hint>
+        <mat-error *ngIf="email.invalid && email.touched">
+          Email của bạn chưa đúng
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Mật khẩu" formControlName="password" [type]="hide ? 'password' : 'text'">
+        <mat-error *ngIf="password.invalid && password.touched">
+          Mật khẩu của bạn chưa đúng
+        </mat-error>
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-hint align="end">Ít nhất 6 ký tự trong đó có 1 số hoặc 1 chữ</mat-hint>
+      </mat-form-field>
+
+      <button mat-flat-button [disabled]="signinForm.invalid" type="submit">
+        <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+        <p *ngIf="!isLoading">Đăng nhập</p>
+      </button>
+      <div class="actions">
+        <a routerLink="/quen-mat-khau">Quên mật khẩu?</a>
+        <p>Chưa có tài khoản? <a routerLink="/dang-ky">Tạo mới</a></p>
+      </div>
+    </form>
+  </div>
+</div>

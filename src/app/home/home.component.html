@@ -1,0 +1,247 @@
+<app-header></app-header>
+
+<div class="loading-screen" [hidden]="!loadingContent">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+
+<div class="row no-gutters home-wrapper">
+
+    <!-- HERO START -->
+
+    <div class="col-12">
+        <div class="row no-gutters hero">
+
+            <!-- SEARCH START -->
+
+            <div class="col-12 col-lg-6 hero-search">
+                <h1>" ĐẶT PHÒNG KHÁCH SẠN, RESORT, NHÀ TRỌ & HƠN NỮA " - SORIUM</h1>
+                <p class="sub-title">Giá tốt nhất cho hơn 2.000.000 chỗ ở trên toàn Việt Nam</p>
+                <div class="search-overlay"></div>
+
+                <form [formGroup]="searchForm" (ngSubmit)="submitHandler()" class="search-form row no-gutters">
+                  <!-- {{ searchForm.value | json }} -->
+                  <mat-form-field class="search-key col-12 shadow" color="primary">
+                    <mat-icon matPrefix>search</mat-icon>
+                    <mat-label>Nhập điểm du lịch hoặc tên khách sạn</mat-label>
+                    <input matInput
+                    placeholder="Ví dụ: Hà Nội" formControlName="searchLocation"
+                    [matAutocomplete]="auto">
+                    <button mat-button *ngIf="searchLocation" matSuffix mat-icon-button (click)="searchLocation=''">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <mat-autocomplete #auto="matAutocomplete"
+                    autoActiveFirstOption
+                    [displayWith]="displayFn">
+                       <mat-option *ngFor="let city of filteredCitys | async" [value]="city">
+                         {{city.ProvinceName}}
+                       </mat-option>
+                     </mat-autocomplete>
+                  </mat-form-field>
+
+                  <mat-form-field class="search-date col-12 shadow" color="primary" (click)="drp.show()">
+                    <mat-icon matPrefix (click)="drp.toggle()">date_range</mat-icon>
+                    <input matInput class="form-control prevent-input" #drp="bsDaterangepicker" placement="bottom"
+                    [minDate]="minDate"
+                    [bsConfig]="bsConfig" bsDaterangepicker autocomplete="off"
+                    formControlName="searchDate" placeholder="Bạn muốn đi du lịch trong bao lâu">
+                  </mat-form-field>
+
+                  <mat-form-field class="search-peoples col-12 col-md-8 shadow">
+                    <mat-icon matPrefix>people</mat-icon>
+                    <input matInput placeholder="Tổng số người" formControlName="peopleCount" autocomplete="off" class="prevent-input">
+                    <div class="people-count md-shadow">
+                      <button mat-button mat-icon-button type="button" (click)="removePeople()">
+                        <mat-icon matPrefix>remove_circle_outline</mat-icon>
+                      </button>
+                      <input matInput readonly formControlName="peopleCount">
+                      <button mat-button mat-icon-button type="button" (click)="addPeople()">
+                        <mat-icon matSuffix>add_circle_outline</mat-icon>
+                      </button>
+
+                    </div>
+                  </mat-form-field>
+
+                  <div class="search-confirm col-12 col-md-4">
+                      <button mat-flat-button color="primary" type="submit" class="shadow">
+                        <p *ngIf="!isLoading">Tìm kiếm</p>
+                        <mat-spinner diameter="40" color="white" *ngIf="isLoading"></mat-spinner>
+                      </button>
+
+                  </div>
+                </form>
+            </div>
+
+            <!-- SEARCH END -->
+
+            <!-- EXPLORE START -->
+
+            <div class="col-12 col-lg-6 hero-news">
+                <mat-tab-group mat-tabs dynamicHeight [selectedIndex]="0">
+                    <mat-tab>
+                      <ng-template mat-tab-label>
+                        <mat-icon>home</mat-icon>
+                        Có gì mới
+                      </ng-template>
+                      <div class="row no-gutters tab-content">
+                        <div class="col-12 col-sm-6 pr-2 pb-2 content-wrapper">
+                            <div class="new-hotel">
+                                <img src="../assets/img/ha-noi.jpg" alt="">
+                                <div class="new-hotel-detail">
+                                    <h3>The Millennials</h3>
+                                    <p>Hà Nội</p>
+                                    <button mat-stroked-button>Đặt phòng ngay</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 pl-2 pb-2 content-wrapper">
+                            <div class="new-hotel">
+                                <img src="../assets/img/ho-chi-minh.jpg" alt="">
+                                <div class="new-hotel-detail">
+                                    <h3>The House</h3>
+                                    <p>TP Hồ Chí Minh</p>
+                                    <button mat-stroked-button>Đặt phòng ngay</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 d-sm-block pt-2 pr-2 content-wrapper">
+                            <div class="new-hotel">
+                                <img src="../assets/img/da-nang.jpg" alt="">
+                                <div class="new-hotel-detail">
+                                    <h3>The Spa</h3>
+                                    <p>Đà Nẵng</p>
+                                    <button mat-stroked-button>Đặt phòng ngay</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 d-sm-block pt-2 pl-2 content-wrapper">
+                            <div class="new-hotel">
+                                <img src="../assets/img/nha-trang.jpg" alt="">
+                                <div class="new-hotel-detail">
+                                    <h3>The Beach House</h3>
+                                    <p>Nha Trang</p>
+                                    <button mat-stroked-button>Đặt phòng ngay</button>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+                    <mat-tab isActive>
+                      <ng-template mat-tab-label>
+                        <mat-icon>public</mat-icon>
+                        Khám phá
+                      </ng-template>
+                      <div class="row no-gutters tab-content">
+                          <div class="col-12 my-2 new-content">
+                            <img src="../assets/img/ha-noi.jpg" alt="">
+                          </div>
+                          <div class="col-12 my-2 new-content">
+                            <img src="../assets/img/ho-chi-minh.jpg" alt="">
+                          </div>
+                      </div>
+                    </mat-tab>
+                    <!-- <mat-tab>
+                        <ng-template mat-tab-label>
+                            <mat-icon>bookmarks</mat-icon>
+                            Optional
+                        </ng-template>
+                        <div class="row no-gutters">
+                            Bla Blah
+                        </div>
+                    </mat-tab> -->
+                </mat-tab-group>
+            </div>
+
+            <!-- EXPLORE END -->
+
+        </div>
+    </div>
+
+    <!-- HERO END -->
+
+    <!-- RUMOR START -->
+    <div class="col-12 rumor-wrapper px-5">
+      <div class="row no-gutters text-center">
+        <h2 class="col-12 py-5">Tiếng lành đồn xa</h2>
+        <div class="col-12 col-lg-4 rumor">
+          <div class="rumor-item">
+            <h3>Khách sạn Serenity</h3>
+            <h5>ở Hà Nội</h5>
+            <p>Khách sạn sạch sẽ, thoải mái và an ninh. Nhân viên niềm nở, lịch sự và phục vụ nhiệt tình. Giá đặt qua Luxuria cũng rất tuyệt nữa, nhất định sẽ quay lại!</p>
+            <h5>- Hiếu ở Đà Nẵng</h5>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4 rumor">
+          <div class="rumor-item">
+            <h3>Khách sạn Merci</h3>
+            <h5>ở Tp.Hồ Chí Minh</h5>
+            <p>Luxuria đã linh hoạt cho tôi đổi phòng mà không tính phí, còn trả lại phần chênh lệch nữa chứ. Rất cám ơn đội ngũ nhân viên Luxuria và Merci Hotel</p>
+            <h5>- Phong ở Hà Nội</h5>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4 rumor">
+          <div class="rumor-item">
+            <h3>Khách sạn Lele</h3>
+            <h5>ở Đà Nẵng</h5>
+            <p>Quả là một trải nghiệm suôn sẻ và đáng nhớ. Cám ơn Luxuria và Lele :)</p>
+            <h5>- Minh ở Nha Trang</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- RUMOR END -->
+
+    <!-- CITY START -->
+
+    <div class="col-12 city-wrapper">
+      <h3 class="text-center py-5">Điểm đến phổ biến</h3>
+      <div class="city-grid p-5">
+        <div class="city-item">
+          <img src="../../assets/img/ha-noi.jpg" alt="">
+          <p>Hà Nội</p>
+        </div>
+        <div class="city-item">
+          <img src="../../assets/img/ho-chi-minh.jpg" alt="">
+          <p>Hồ Chí Minh</p>
+        </div>
+        <div class="city-item">
+          <img src="../../assets/img/nha-trang.jpg" alt="">
+          <p>Nha Trang</p>
+        </div>
+        <div class="city-item">
+          <img src="../../assets/img/da-nang.jpg" alt="">
+          <p>Đà Nẵng</p>
+        </div>
+        <div class="city-item">
+          <img src="../../assets/img/ha-noi.jpg" alt="">
+          <p>Hà Nội</p>
+        </div>
+        <div class="city-item">
+          <img src="../../assets/img/ho-chi-minh.jpg" alt="">
+          <p>Hồ Chí Minh</p>
+        </div>
+        <div class="city-item">
+          <img src="../../assets/img/nha-trang.jpg" alt="">
+          <p>Nha Trang</p>
+        </div>
+        <div class="city-item">
+          <img src="../../assets/img/da-nang.jpg" alt="">
+          <p>Đà Nẵng</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CITY END -->
+
+</div>
+
+<app-footer></app-footer>

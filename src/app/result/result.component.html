@@ -1,0 +1,568 @@
+<app-header></app-header>
+
+<div class="row no-gutters p-5">
+
+  <div class="col-3 px-2 d-none">
+    <div class="search-filter sm-shadow p-2">
+      <h3 mat-header><mat-icon matPrefix>filter_list</mat-icon>Tìm theo</h3>
+      <mat-divider></mat-divider>
+      <mat-list color="primary">
+        <h4 mat-header>Giá tiền</h4>
+        <ion-range-slider #sliderElement
+            type="double"
+            min="0"
+            max="100000"
+            postfix=" đ"
+            prettify_enabled="true"
+            prettify_separator="."
+            decorate_both="false"
+            force_edges="true"
+        ></ion-range-slider>
+        <mat-selection-list color="primary">
+          <mat-list-option color="primary">
+            Bình dân
+          </mat-list-option>
+          <mat-list-option>
+            Cao cấp
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-list>
+      <mat-divider></mat-divider>
+      <mat-list>
+        <h4 mat-header>Thành Phố</h4>
+        <mat-selection-list>
+          <mat-list-option>
+            Hà Nội
+          </mat-list-option>
+          <mat-list-option>
+            Hồ Chí Minh
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-list>
+      <mat-divider>ÁD</mat-divider>
+      <mat-list>
+        <h4 mat-header>Đánh giá</h4>
+        <mat-selection-list>
+          <mat-list-option>
+            Bình dân
+          </mat-list-option>
+          <mat-list-option>
+            Cao cấp
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-list>
+    </div>
+  </div>
+  <div class="col-12 col-md-10 px-2 m-auto result-wrapper">
+
+    <div class="search-result-filter mb-4">
+      <p class="mr-2 ml-auto">Sắp xếp giá theo</p>
+      <mat-button-toggle-group #group="matButtonToggleGroup" value="suggest">
+        <mat-button-toggle value="suggest" matTooltipClass="tooltip-bg" matTooltip="Gợi ý">
+          <mat-icon>thumb_up</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="down" matTooltipClass="tooltip-bg" matTooltip="Từ cao xuống thấp">
+          <mat-icon>trending_down</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="up" matTooltipClass="tooltip-bg" matTooltip="Từ thấp lên cao">
+          <mat-icon>trending_up</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <div class="search-result">
+      <mat-card class="search-item" *ngFor="let hotel of hotels">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="{{hotel.thumbnail}}">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltipPosition="right" matTooltipClass="tooltip-bg" *ngFor="let tagIcon of hotel.tagIcons" matTooltip="{{tagIcon.description}}"><mat-icon fontSet="fa" class="fa-icon" fontIcon="{{tagIcon.iconName}}"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>{{hotel.about}}</p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">{{hotel.name}}</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate nzDisabled nzAllowHalf [ngModel]="hotel.star"></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>{{hotel.location}}</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag-text">
+              <button *ngFor="let tagText of hotel.tagTexts" mat-stroked-button color="{{tagText.color}}">{{tagText.text}}</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>Chỉ từ {{hotel.minPrice}}/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+      <mat-card class="search-item">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="../../assets/img/ha-noi.jpg">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltip="Wifi miễn phí" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>wifi</mat-icon></button>
+                <button mat-icon-button matTooltip="Có phòng tắm" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>hot_tub</mat-icon></button>
+                <button mat-icon-button matTooltip="Không hút thuốc" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>smoke_free</mat-icon></button>
+                <button mat-icon-button matTooltip="Có căng tin" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>restaurant_menu</mat-icon></button>
+                <button mat-icon-button matTooltip="Có điều hòa" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-snowflake"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này. Với vị trí thuận lợi, khách sạn dễ dàng tiếp cận những điểm tham quan du lịch nổi tiếng của thành phố.
+              </p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">Khách sạn Helios Legend</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate [ngModel]="3.5" nzDisabled nzAllowHalf></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>Phố cổ hà nội</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag">
+              <button mat-stroked-button class="green">Ăn sáng miễn phí</button>
+              <button mat-stroked-button color="warn">Thanh toán tại nơi ở</button>
+              <button mat-stroked-button color="primary">Mới xây dựng</button>
+              <button mat-stroked-button color="accent">Đang hot</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>1.230.000 đ/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+      <mat-card class="search-item">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="../../assets/img/hotel-1.jpg">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltip="Wifi miễn phí" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>wifi</mat-icon></button>
+                <button mat-icon-button matTooltip="Có phòng tắm" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>hot_tub</mat-icon></button>
+                <button mat-icon-button matTooltip="Không hút thuốc" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>smoke_free</mat-icon></button>
+                <button mat-icon-button matTooltip="Có căng tin" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>restaurant_menu</mat-icon></button>
+                <button mat-icon-button matTooltip="Có điều hòa" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-snowflake"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+              </p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">Khách sạn Helios Legend</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate [ngModel]="3.5" nzDisabled nzAllowHalf></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>Phố cổ hà nội</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag">
+              <button mat-stroked-button class="green">Ăn sáng miễn phí</button>
+              <button mat-stroked-button color="warn">Thanh toán tại nơi ở</button>
+              <button mat-stroked-button color="primary">Mới xây dựng</button>
+              <button mat-stroked-button color="accent">Đang hot</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>1.230.000 đ/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+      <mat-card class="search-item">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="../../assets/img/ho-chi-minh.jpg">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltip="Wifi miễn phí" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>wifi</mat-icon></button>
+                <button mat-icon-button matTooltip="Có phòng tắm" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>hot_tub</mat-icon></button>
+                <button mat-icon-button matTooltip="Không hút thuốc" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>smoke_free</mat-icon></button>
+                <button mat-icon-button matTooltip="Có căng tin" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>restaurant_menu</mat-icon></button>
+                <button mat-icon-button matTooltip="Có điều hòa" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-snowflake"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+              </p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">Khách sạn Helios Legend</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate [ngModel]="3.5" nzDisabled nzAllowHalf></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>Phố cổ hà nội</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag">
+              <button mat-stroked-button class="green">Ăn sáng miễn phí</button>
+              <button mat-stroked-button color="warn">Thanh toán tại nơi ở</button>
+              <button mat-stroked-button color="primary">Mới xây dựng</button>
+              <button mat-stroked-button color="accent">Đang hot</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>1.230.000 đ/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+      <mat-card class="search-item">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="../../assets/img/da-nang.jpg">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltip="Wifi miễn phí" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>wifi</mat-icon></button>
+                <button mat-icon-button matTooltip="Có phòng tắm" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>hot_tub</mat-icon></button>
+                <button mat-icon-button matTooltip="Không hút thuốc" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>smoke_free</mat-icon></button>
+                <button mat-icon-button matTooltip="Có căng tin" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>restaurant_menu</mat-icon></button>
+                <button mat-icon-button matTooltip="Có điều hòa" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-snowflake"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+              </p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">Khách sạn Helios Legend</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate [ngModel]="3.5" nzDisabled nzAllowHalf></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>Phố cổ hà nội</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag">
+              <button mat-stroked-button class="green">Ăn sáng miễn phí</button>
+              <button mat-stroked-button color="warn">Thanh toán tại nơi ở</button>
+              <button mat-stroked-button color="primary">Mới xây dựng</button>
+              <button mat-stroked-button color="accent">Đang hot</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>1.230.000 đ/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+      <mat-card class="search-item">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="../../assets/img/nha-trang.jpg">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltip="Wifi miễn phí" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>wifi</mat-icon></button>
+                <button mat-icon-button matTooltip="Có phòng tắm" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>hot_tub</mat-icon></button>
+                <button mat-icon-button matTooltip="Không hút thuốc" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>smoke_free</mat-icon></button>
+                <button mat-icon-button matTooltip="Có căng tin" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>restaurant_menu</mat-icon></button>
+                <button mat-icon-button matTooltip="Có điều hòa" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-snowflake"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+              </p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">Khách sạn Helios Legend</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate [ngModel]="3.5" nzDisabled nzAllowHalf></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>Phố cổ hà nội</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag">
+              <button mat-stroked-button class="green">Ăn sáng miễn phí</button>
+              <button mat-stroked-button color="warn">Thanh toán tại nơi ở</button>
+              <button mat-stroked-button color="primary">Mới xây dựng</button>
+              <button mat-stroked-button color="accent">Đang hot</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>1.230.000 đ/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+      <mat-card class="search-item">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="../../assets/img/ha-noi.jpg">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltip="Wifi miễn phí" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>wifi</mat-icon></button>
+                <button mat-icon-button matTooltip="Có phòng tắm" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>hot_tub</mat-icon></button>
+                <button mat-icon-button matTooltip="Không hút thuốc" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>smoke_free</mat-icon></button>
+                <button mat-icon-button matTooltip="Có căng tin" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>restaurant_menu</mat-icon></button>
+                <button mat-icon-button matTooltip="Có điều hòa" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-snowflake"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này. Với vị trí thuận lợi, khách sạn dễ dàng tiếp cận những điểm tham quan du lịch nổi tiếng của thành phố.
+              </p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">Khách sạn Helios Legend</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate [ngModel]="3.5" nzDisabled nzAllowHalf></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>Phố cổ hà nội</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag">
+              <button mat-stroked-button class="green">Ăn sáng miễn phí</button>
+              <button mat-stroked-button color="warn">Thanh toán tại nơi ở</button>
+              <button mat-stroked-button color="primary">Mới xây dựng</button>
+              <button mat-stroked-button color="accent">Đang hot</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>1.230.000 đ/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+      <mat-card class="search-item">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="../../assets/img/hotel-1.jpg">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltip="Wifi miễn phí" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>wifi</mat-icon></button>
+                <button mat-icon-button matTooltip="Có phòng tắm" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>hot_tub</mat-icon></button>
+                <button mat-icon-button matTooltip="Không hút thuốc" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>smoke_free</mat-icon></button>
+                <button mat-icon-button matTooltip="Có căng tin" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>restaurant_menu</mat-icon></button>
+                <button mat-icon-button matTooltip="Có điều hòa" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-snowflake"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+              </p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">Khách sạn Helios Legend</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate [ngModel]="3.5" nzDisabled nzAllowHalf></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>Phố cổ hà nội</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag">
+              <button mat-stroked-button class="green">Ăn sáng miễn phí</button>
+              <button mat-stroked-button color="warn">Thanh toán tại nơi ở</button>
+              <button mat-stroked-button color="primary">Mới xây dựng</button>
+              <button mat-stroked-button color="accent">Đang hot</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>1.230.000 đ/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+      <mat-card class="search-item">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="../../assets/img/ho-chi-minh.jpg">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltip="Wifi miễn phí" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>wifi</mat-icon></button>
+                <button mat-icon-button matTooltip="Có phòng tắm" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>hot_tub</mat-icon></button>
+                <button mat-icon-button matTooltip="Không hút thuốc" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>smoke_free</mat-icon></button>
+                <button mat-icon-button matTooltip="Có căng tin" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>restaurant_menu</mat-icon></button>
+                <button mat-icon-button matTooltip="Có điều hòa" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-snowflake"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+              </p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">Khách sạn Helios Legend</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate [ngModel]="3.5" nzDisabled nzAllowHalf></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>Phố cổ hà nội</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag">
+              <button mat-stroked-button class="green">Ăn sáng miễn phí</button>
+              <button mat-stroked-button color="warn">Thanh toán tại nơi ở</button>
+              <button mat-stroked-button color="primary">Mới xây dựng</button>
+              <button mat-stroked-button color="accent">Đang hot</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>1.230.000 đ/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+      <mat-card class="search-item">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="../../assets/img/da-nang.jpg">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltip="Wifi miễn phí" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>wifi</mat-icon></button>
+                <button mat-icon-button matTooltip="Có phòng tắm" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>hot_tub</mat-icon></button>
+                <button mat-icon-button matTooltip="Không hút thuốc" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>smoke_free</mat-icon></button>
+                <button mat-icon-button matTooltip="Có căng tin" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>restaurant_menu</mat-icon></button>
+                <button mat-icon-button matTooltip="Có điều hòa" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-snowflake"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+              </p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">Khách sạn Helios Legend</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate [ngModel]="3.5" nzDisabled nzAllowHalf></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>Phố cổ hà nội</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag">
+              <button mat-stroked-button class="green">Ăn sáng miễn phí</button>
+              <button mat-stroked-button color="warn">Thanh toán tại nơi ở</button>
+              <button mat-stroked-button color="primary">Mới xây dựng</button>
+              <button mat-stroked-button color="accent">Đang hot</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>1.230.000 đ/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+      <mat-card class="search-item">
+        <div class="search-content">
+          <div mat-card-image>
+            <img  src="../../assets/img/nha-trang.jpg">
+            <div class="tag-icon-wrapper">
+              <div class="tag-icon">
+                <button mat-icon-button matTooltip="Wifi miễn phí" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>wifi</mat-icon></button>
+                <button mat-icon-button matTooltip="Có phòng tắm" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>hot_tub</mat-icon></button>
+                <button mat-icon-button matTooltip="Không hút thuốc" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>smoke_free</mat-icon></button>
+                <button mat-icon-button matTooltip="Có căng tin" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon>restaurant_menu</mat-icon></button>
+                <button mat-icon-button matTooltip="Có điều hòa" matTooltipPosition="right" matTooltipClass="tooltip-bg"><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-snowflake"></mat-icon></button>
+              </div>
+            </div>
+            <div class="info">
+              <h4>Giới thiệu</h4>
+              <p>
+                Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội. Cách sự nhộn nhịp của thành phố 0 KM, khách sạn 3.5 sao này có vị trí vô cùng thuận lợi và dễ tiếp cận các địa điểm lớn của thành phố này.
+              </p>
+            </div>
+            <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+          </div>
+          <mat-card-header>
+            <mat-card-title routerLink="/chi-tiet">Khách sạn Helios Legend</mat-card-title>
+            <mat-card-subtitle>
+              <nz-rate [ngModel]="3.5" nzDisabled nzAllowHalf></nz-rate>
+              <mat-icon matPrefix>location_on</mat-icon>
+              <p>Phố cổ hà nội</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="tag">
+              <button mat-stroked-button class="green">Ăn sáng miễn phí</button>
+              <button mat-stroked-button color="warn">Thanh toán tại nơi ở</button>
+              <button mat-stroked-button color="primary">Mới xây dựng</button>
+              <button mat-stroked-button color="accent">Đang hot</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+
+            <p>1.230.000 đ/ đêm</p>
+            <button mat-flat-button color="primary">Đặt phòng</button>
+
+          </mat-card-actions>
+        </div>
+      </mat-card>
+
+  </div>
+  </div>
+</div>
+<app-footer></app-footer>

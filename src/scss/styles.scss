@@ -1,0 +1,76 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import 'node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
+@import 'variables';
+@import 'common';
+@import "~@fortawesome/fontawesome-free/css/all.css";
+/* GLOBAL */
+
+*{
+  margin: 0;
+  padding: 0;
+  font-family: Quicksand;
+  &::-webkit-scrollbar{
+      width: 8px;
+      height: 8px;
+      transition: all .3s ease-in-out;
+  }
+  &::-webkit-scrollbar-thumb{
+      background: rgba(0,0,0,.1);
+      border-radius: 2px;
+      transition: all .3s ease-in-out;
+      &:hover{
+          background: rgba(0,0,0,.3);
+      }
+  }
+  &::-webkit-scrollbar-track{
+      background: rgba(0,0,0,.05);
+      transition: all .3s ease-in-out;
+      &:hover{
+          background: rgba(0,0,0,.01);
+      }
+  }
+}
+
+/* RESET */
+
+body{
+  font-size: 16px;
+}
+
+.bs-datepicker{
+  box-shadow:none;
+  width: 100%;
+}
+.mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate{
+  background: $cl-primary;
+}
+.irs-from, .irs-to, .irs-single{
+  background: $cl-primary;
+  font-size: .8rem;
+  &:after{
+    border-top-color: $cl-primary;
+  }
+}
+
+.mat-button-toggle-checked{
+  background: rgba($cl-primary, .3);
+  color: $cl-primary;
+  mat-icon{
+    color: $cl-primary;
+  }
+
+}
+
+/* mat-form-field{
+  &.mat-focused{
+    .mat-form-field-prefix{
+      mat-icon{
+        color: $cl-primary!important;
+      }
+    }
+  }
+} */
+
+.tooltip-bg{
+  background: rgba(0,0,0,.5);
+}

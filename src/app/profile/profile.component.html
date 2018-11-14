@@ -1,0 +1,76 @@
+<app-header></app-header>
+
+<div class="row no-gutters p-5 profile-wrapper">
+  <div class="col-12 col-md-3 px-1">
+    <div class="user-profile p-2">
+      <div class="user-avatar my-3">
+        <img src="../../assets/img/ha-noi.jpg" alt="">
+      </div>
+      <div class="user-info">
+        <p class="text-center">Cồ Triệu Phong</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-9 px-1">
+    <mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">account_circle</mat-icon>
+          Hồ sơ của tôi
+        </ng-template>
+        <mat-accordion multi="true" class="personal-info">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Thông tin cá nhân
+              </mat-panel-title>
+              <mat-panel-description>
+                Họ tên, tuổi và địa chỉ của bạn
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Họ tên: Cồ Triệu Phong</p>
+            <p>Tuổi: 23</p>
+            <p>Địa chỉ: 1047 - Đê La Thành</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Bảo mật
+              </mat-panel-title>
+              <mat-panel-description>
+                Mật khẩu và Email của bạn
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Email: cotrieuphong@gmail.com</p>
+            <p>Mật khẩu: **********</p>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">today</mat-icon>
+          Đặt phòng của tôi
+        </ng-template>
+        Hiện tại bạn chưa đặt phòng.
+        <button mat-flat-button>Đặt phòng ngay</button>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">email</mat-icon>
+          <span matBadgeOverlap="false" matBadge="3" matBadgePosition="after" matBadgeSize="medium" matBadgeColor="primary">Hộp thư</span>
+        </ng-template>
+        <mat-list>
+          <button mat-button>Chào mừng!</button>
+          <mat-divider></mat-divider>
+          <button mat-button>Chào mừng!</button>
+          <mat-divider></mat-divider>
+          <button mat-button>Chào mừng!</button>
+        </mat-list>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+
+<app-footer></app-footer>
