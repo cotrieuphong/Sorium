@@ -1,41 +1,108 @@
 <app-header></app-header>
 
 <nz-anchor [nzOffsetTop]="0" [nzAffix]="true" [nzShowInkInFixed]="false">
-  <nz-link nzHref="#about" nzTitle="Giới thiệu" title="" matRipple [matRippleColor]="primary"></nz-link>
-  <nz-link nzHref="#room" nzTitle="Phòng ốc" matRipple [matRippleColor]="primary"></nz-link>
-  <nz-link nzHref="#gallery" nzTitle="Hình ảnh" matRipple [matRippleColor]="primary"></nz-link>
-  <nz-link nzHref="#compare" nzTitle="So sánh" matRipple [matRippleColor]="primary"></nz-link>
-  <nz-link nzHref="#comment" nzTitle="Đánh giá" matRipple [matRippleColor]="primary"></nz-link>
+  <nz-link matRipple nzHref="#about" nzTitle="Giới thiệu" title=""></nz-link>
+  <nz-link matRipple nzHref="#room" nzTitle="Phòng ốc"></nz-link>
+  <nz-link matRipple nzHref="#gallery" nzTitle="Hình ảnh"></nz-link>
+  <nz-link matRipple nzHref="#compare" nzTitle="So sánh"></nz-link>
+  <nz-link matRipple nzHref="#comment" nzTitle="Đánh giá"></nz-link>
 </nz-anchor>
 
-<div class="row no-gutters detail-wrapper">
-  <div id="about" class="col-12 col-md-10 m-auto">
-    <div class="content sm-shadow">
-      <h2>Khách sạn Helios Legend</h2>
+<div class="row no-gutters detail-wrapper" *ngFor="let h of hotel">
+
+  <div id="about" class="col-12 col-md-10 m-auto hotel hotel-about">
+    <div class="ha-wrapper">
+      <div class="gallery sm-shadow">
+        <ngx-slick-carousel gallerize class="hero-carousel"
+          #slickModal="slick-carousel"
+          [config]="heroConfig">
+          <div ngxSlickItem *ngFor="let img of h.images">
+            <img src="{{img.src}}" alt="fluid-img">
+          </div>
+        </ngx-slick-carousel>
+        <ngx-slick-carousel class="nav-carousel"
+          #slickModal="slick-carousel"
+          [config]="navConfig">
+          <div ngxSlickItem *ngFor="let img of h.images">
+            <img src="{{img.src}}" alt="fluid-img">
+          </div>
+        </ngx-slick-carousel>
+      </div>
+      <!-- <gallery gallerize id="hero-gallery" autoPlay="true" imageSize="cover"
+      [items]="images"
+      thumbPosition="bottom" class="sm-shadow"></gallery> -->
+      <div class="ha-content sm-shadow">
+        <h2 class="hotel-title">{{h.name}}</h2>
+        <div class="hotel-subtitle">
+          <nz-rate nzDisabled nzAllowHalf [ngModel]="h.star"></nz-rate>
+          <mat-icon matPrefix>location_on</mat-icon>
+          <p>{{h.location}}</p>
+        </div>
+        <mat-divider class="my-2"></mat-divider>
+        <div class="hotel-tag">
+          <button mat-button *ngFor="let service of h.services"><mat-icon fontSet="fa" class="fa-icon" fontIcon="{{service.icon}}"></mat-icon><p>{{service.description}}</p></button>
+        </div>
+        <mat-divider class="my-2"></mat-divider>
+        <div class="hotel-description">
+          <p innerHTML="{{h.about}}"></p>
+        </div>
+      </div>
     </div>
   </div>
-  <div id="room" class="col-12 col-md-10 m-auto">
-    <div class="content sm-shadow">
-      <h2>Phòng ốc</h2>
+  <div id="room" class="col-12 col-md-10 m-auto hotel hotel-room">
+    <h2 class="hotel-title mb-4">Phòng ốc</h2>
+
+    <div class="hr-item sm-shadow" *ngFor="let r of h.rooms">
+      <div class="item-avatar">
+        <img src="{{r.image}}" class="fluid-img">
+      </div>
+      <div class="item-info">
+        <h3 class="room-title">{{r.name}}</h3>
+        <p><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-home" matPrefix></mat-icon>Diện tích {{r.area}}m<sup>2</sup></p>
+        <p *ngFor="let tag of r.info"><mat-icon fontSet="fa" class="fa-icon" fontIcon="{{tag.icon}}" matPrefix></mat-icon>{{tag.description}}</p>
+      </div>
+      <div class="item-price">
+        <p>{{r.price}} đ/đêm</p>
+        <button mat-flat-button routerLink="/thanh-toan">Đặt phòng</button>
+      </div>
     </div>
 
-  </div>
-  <div id="gallery" class="col-12 col-md-10 m-auto">
 
-    <div class="content sm-shadow">
-      <h2>Hình ảnh</h2>
+  </div>
+  <div id="gallery" class="col-12 col-md-10 m-auto hotel hotel-gallery">
+    <h2 class="hotel-title mb-4">Hình ảnh</h2>
+    <div class="hg-content" gallerize>
+      <img *ngFor="let img of h.images" src="{{img.src}}" class="hg-item">
     </div>
   </div>
-  <div id="compare" class="col-12 col-md-10 m-auto">
-
-    <div class="content sm-shadow">
-      <h2>So sánh</h2>
+  <div id="compare" class="col-12 col-md-10 m-auto hotel hotel-compare">
+    <h2 class="hotel-title mb-4">So sánh</h2>
+    <div class="hc-content row no-gutters">
+      <div class="hc-item1 col-4">
+        <div class="item-avatar">
+          <img src="../../assets/img/ha-noi.jpg" class="fluid-img">
+        </div>
+        <h3>Khách sạn Helios Legend</h3>
+        <p>1.234.000 đ/đêm</p>
+      </div>
+      <div class="hc-item2 col-4">
+        <button mat-stroked-button color="primary"> Thêm khách sạn</button>
+      </div>
+      <div class="hc-item3 col-4">
+        <button mat-stroked-button color="primary"> Thêm khách sạn</button>
+      </div>
     </div>
   </div>
-  <div id="comment" class="col-12 col-md-10 m-auto">
-
-    <div class="content sm-shadow">
-      <h2>Đánh giá</h2>
+  <div id="comment" class="col-12 col-md-10 m-auto hotel hotel-comment">
+    <h2 class="hotel-title mb-4">Đánh giá</h2>
+    <div class="hcm-content sm-shadow">
+      <mat-list>
+        <mat-list-item>Bình luận</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>Bình luận</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>Bình luận</mat-list-item>
+      </mat-list>
     </div>
   </div>
 </div>

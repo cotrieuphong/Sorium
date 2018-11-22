@@ -76,6 +76,7 @@
         overflow: hidden;
         position: relative;
         img{
+          will-change: auto;
           transition: all .3s ease;
           object-fit: cover;
           object-possition: center;
@@ -92,6 +93,7 @@
           left: 0;
           background: rgba(0,0,0,.5);
           opacity: 0;
+          will-change: auto;
           transition: .3s ease-in-out;
           .tag-icon{
             display: flex;
@@ -102,11 +104,12 @@
             .mat-icon-button{
               opacity: 0;
               transform: translateX(-50px);
+              will-change: auto;
               .mat-icon{
                 color: $cl-white;
               }
               .fa-icon{
-                font-size: 1.4rem;
+                font-size: 1.2rem;
               }
               @for $i from 1 through 10 {
                 &:nth-child(#{$i}) {
@@ -130,6 +133,7 @@
           background: rgba(0,0,0,.7);
           opacity: 0;
           transition: .3s ease-in-out;
+          will-change: auto;
           text-align: justify;
           h4{
             display: inline-block;
@@ -191,6 +195,7 @@
           height: 2rem;
           color: $cl-white;
           opacity: 0;
+          will-change: auto;
           transition: all .15s ease-in-out;
           cursor: pointer;
           &.show{
@@ -280,5 +285,77 @@
   border-clor: $cl-red;
   .mat-button-focus-overlay{
     background: rgba($cl-red, .15);
+  }
+}
+
+.result-wrapper{
+  position: relative;
+}
+
+.loading-screen{
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 600;
+  min-height: 100vh;
+  background: $cl-white;
+  .spinner {
+    margin: 100px auto;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 10px;
+  }
+
+  .spinner > div {
+    background: linear-gradient(135deg, #ff5f6d, #ffc371);
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+
+    -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  }
+
+  .rect{
+    margin: 0 3px 0 0;
+  }
+
+  .spinner .rect2 {
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s;
+  }
+
+  .spinner .rect3 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+  }
+
+  .spinner .rect4 {
+    -webkit-animation-delay: -0.9s;
+    animation-delay: -0.9s;
+  }
+
+  .spinner .rect5 {
+    -webkit-animation-delay: -0.8s;
+    animation-delay: -0.8s;
+  }
+
+  @-webkit-keyframes sk-stretchdelay {
+    0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+    20% { -webkit-transform: scaleY(1.0) }
+  }
+
+  @keyframes sk-stretchdelay {
+    0%, 40%, 100% {
+      transform: scaleY(0.4);
+      -webkit-transform: scaleY(0.4);
+    }  20% {
+      transform: scaleY(1.0);
+      -webkit-transform: scaleY(1.0);
+    }
   }
 }

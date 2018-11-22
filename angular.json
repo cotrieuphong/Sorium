@@ -41,12 +41,15 @@
               "node_modules/ion-rangeslider/css/ion.rangeSlider.css",
               "node_modules/ion-rangeslider/css/ion.rangeSlider.skinFlat.css",
               "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
+              "node_modules/slick-carousel/slick/slick.scss",
+              "node_modules/slick-carousel/slick/slick-theme.scss",
               "src/scss/styles.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/ion-rangeslider/js/ion.rangeSlider.min.js",
               "node_modules/masonry-layout/dist/masonry.pkgd.min.js",
+              "node_modules/slick-carousel/slick/slick.min.js",
               "node_modules/imagesloaded/imagesloaded.pkgd.min.js"
             ]
           },

@@ -65,8 +65,8 @@ export class SigninComponent implements OnInit {
         nzPauseOnHover: true
       })
       setTimeout(function() {
-        localStorage.setItem('currentUser', JSON.stringify(data));
-				// localStorage.getItem('tokenKey', res.Data.AccessToken)
+        // localStorage.setItem('currentUser', JSON.stringify(data));
+				localStorage.setItem('tokenKey', data.Data.AccessToken)
 				self.router.navigate(['/'])
 			}, 1000)
     },

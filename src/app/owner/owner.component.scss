@@ -1,0 +1,41 @@
+@import "../../scss/variables.scss";
+.owner-hotel-wrapper{
+  max-width: 1200px;
+  margin: auto;
+  .owner-hotel{
+    width: 100%;
+    border-left: 4px solid $cl-primary;
+    padding: 1rem;
+    h2{
+      font-size: 2rem;
+      color: $cl-primary;
+    }
+    form{
+      width: 100%;
+      display: flex;
+      flex-flow: row wrap;
+      .mat-form-field{
+        width: 100%;
+        margin-bottom: .5rem;
+      }
+      .hotel-email, .hotel-phone, .hotel-district, .hotel-province, .hotel-tax, .hotel-star{
+        width: 50%;
+      }
+    }
+  }
+}
+.paper{
+  width: 100%;
+  .file-upload{
+    width: 100%;
+  }
+}
+.ant-upload-list{
+  display: flex;
+  flex-flow: row wrap;
+  .ant-upload-list-item{
+    width: fit-content;
+    padding: 0 20px;
+    margin-right: 8px;
+  }
+}

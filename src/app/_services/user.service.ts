@@ -5,21 +5,9 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { User } from '../_models/user';
 
-const httpOptions = {
-	headers: new HttpHeaders({
-		'Content-Type':  'application/json',
-		'Accept': 'application/json',
-		'Access-Controll-Allow-Origin': '*',
-		'Access-Control-Allow-Credentials': 'true',
-	})
-}
-
 const httpAuthOptions = {
 	headers: new HttpHeaders({
-		'Content-Type':  'application/json',
-		'Accept': 'application/json',
-		'Access-Controll-Allow-Origin': '*',
-		'Access-Control-Allow-Credentials': 'true',
+		'Content-Type': 'application/json; charset=utf-8',
 		'TokenCode': localStorage.getItem('tokenKey'),
 	})
 }
@@ -33,10 +21,13 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  signup (user: User): Observable<any> {
-
-    return this.http.post(this.soriumUrl + 'Acc/Register', user, httpOptions)
+  signup(user) {
+    return this.http.post(this.soriumUrl + 'Acc/Register', user)
 
   }
+
+	ownerSignup(formData){
+		return this.http.post(this.soriumUrl + 'Hotel/RegisterHotel', formData, httpAuthOptions)
+	}
 
 }

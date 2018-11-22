@@ -1,0 +1,99 @@
+@import "../../../scss/variables.scss";
+
+@font-face{
+  font-family: Playful;
+  src: url(../../../assets/font/PlaylistScript.otf);
+}
+
+.signup-confirm-wrapper{
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ff5f6d, #ffc371);
+  display: flex;
+  .signup-content{
+    margin: auto;
+    width: 90%;
+    max-width: 1000px;
+    overflow: hidden;
+    border-radius: 2px;
+    .signup-confirm{
+      padding: 1rem;
+      background: $cl-white;
+      table{
+        width: 100%;
+        .mat-form-field{
+          width: 100%;
+          margin-bottom: 1rem;
+        }
+      }
+      .top-logo{
+        margin-bottom: 1rem;
+        img{
+          width: 15rem;
+          margin: auto;
+          cursor: pointer;
+        }
+      }
+      button{
+        margin-bottom: 1rem;
+        width: 105px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        p{
+          margin: 0;
+        }
+        .mat-spinner{
+          circle{
+            stroke: $cl-white;
+          }
+        }
+      }
+      @media (max-width: 767px){
+        button{
+          width: 100%;
+        }
+      }
+      .actions{
+
+        font-size: .9rem;
+        p{
+          margin: 0;
+        }
+      }
+    }
+    .ads-box{
+      align-items: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364) center no-repeat;
+      background-size: cover;
+      position: relative;
+      a{
+        margin: auto;
+        font-family: Playful;
+        font-size: 3.5rem;
+        color: #fff;
+        z-index: 200;
+        text-decoration: none;
+      }
+      img{
+        position: absolute;
+        display: block;
+        content: '';
+        top: 50%;
+        right: 0;
+        height: 200%;
+        animation: spin 100s linear infinite;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0%{
+    transform: translate(75%, -50%) rotate(0deg)
+  }
+  100%{
+    transform: translate(75%, -50%) rotate(360deg)
+  }
+}

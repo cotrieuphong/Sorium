@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { HotelService } from '../_services/hotel.service';
 import * as $ from 'jquery';
 import Masonry from 'masonry-layout';
 import ImagesLoaded from 'imagesLoaded';
@@ -158,7 +160,7 @@ export class ResultComponent implements OnInit {
       location: 'Phố cổ hà nội',
       thumbnail:'../../assets/img/nha-trang.jpg',
       about: `Cho dù bạn là khách du lịch hay đi công tác, Helios Legend Hotel là sự lựa chọn tuyệt vời để nghỉ lại khi đến thành phố Hà Nội.`,
-      star: 4.5,
+      star: 3.5,
       minPrice: '2.490.000 đ',
       tagIcons: [
         {
@@ -197,21 +199,49 @@ export class ResultComponent implements OnInit {
         }
       ]
     }
-  ]
+  ];
 
-  constructor() { }
+
+getPaging;
+
+  loadingScreen = true;
+
+  public location: string;
+  public checkin: string;
+  public checkout: string;
+  public people: number;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private hotelService : HotelService) {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.location = "" ? "" : params["location"];
+      this.checkin = "" ? "" : params["checkin"];
+      this.checkout = "" ? "" : params["checkout"];
+      this.people = params["people"];
+    });
+
+    // console.log(this.location, this.checkin, this.checkout this.people);
+  }
 
   ngOnInit() {
     console.log(this.hotels);
-    const grid = document.querySelector('.search-result');
-    this.imagesLoaded(grid, function(){
-      const msnry = new Masonry(grid, {
-        itemSelector: '.search-item',
-        gutter: 16,
-        percentPosition: true,
-        horizontalOrder: true,
-      })
-
+    this.getPaging = {
+      PageSize: 20,
+      PageIndex: 1,
+      FilterRules: [
+        {
+          field: "ProvinceCode",
+          op: "=",
+          value: this.location
+        },
+        {
+          field: "peopleCount",
+          op: ">=",
+          value: "3"
+        }
+      ]
+    }
+    this.hotelService.getHotel(this.getPaging).subscribe(res => {
+      console.log(res)
     })
 
     $(function(){
@@ -223,7 +253,18 @@ export class ResultComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-
+    const grid = document.querySelector('.search-result');
+    this.imagesLoaded(grid, function(){
+      const msnry = new Masonry(grid, {
+        itemSelector: '.search-item',
+        gutter: 16,
+        percentPosition: true,
+        horizontalOrder: true,
+      });
+    })
+    setTimeout(() => {
+      this.loadingScreen = false;
+    }, 3000)
   }
 
 }

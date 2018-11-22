@@ -172,28 +172,12 @@
     <div class="col-12 rumor-wrapper px-5">
       <div class="row no-gutters text-center">
         <h2 class="col-12 py-5">Tiếng lành đồn xa</h2>
-        <div class="col-12 col-lg-4 rumor">
+        <div class="col-12 col-lg-4 rumor" *ngFor="let cm of comments">
           <div class="rumor-item">
-            <h3>Khách sạn Serenity</h3>
-            <h5>ở Hà Nội</h5>
-            <p>Khách sạn sạch sẽ, thoải mái và an ninh. Nhân viên niềm nở, lịch sự và phục vụ nhiệt tình. Giá đặt qua Luxuria cũng rất tuyệt nữa, nhất định sẽ quay lại!</p>
-            <h5>- Hiếu ở Đà Nẵng</h5>
-          </div>
-        </div>
-        <div class="col-12 col-lg-4 rumor">
-          <div class="rumor-item">
-            <h3>Khách sạn Merci</h3>
-            <h5>ở Tp.Hồ Chí Minh</h5>
-            <p>Luxuria đã linh hoạt cho tôi đổi phòng mà không tính phí, còn trả lại phần chênh lệch nữa chứ. Rất cám ơn đội ngũ nhân viên Luxuria và Merci Hotel</p>
-            <h5>- Phong ở Hà Nội</h5>
-          </div>
-        </div>
-        <div class="col-12 col-lg-4 rumor">
-          <div class="rumor-item">
-            <h3>Khách sạn Lele</h3>
-            <h5>ở Đà Nẵng</h5>
-            <p>Quả là một trải nghiệm suôn sẻ và đáng nhớ. Cám ơn Luxuria và Lele :)</p>
-            <h5>- Minh ở Nha Trang</h5>
+            <h3 routerLink="/chi-tiet">{{cm.hotelName}}</h3>
+            <h5>ở {{cm.hotelLocation}}</h5>
+            <p>{{cm.description}}</p>
+            <h5>- {{cm.user}} ở {{cm.userLocation}}</h5>
           </div>
         </div>
       </div>

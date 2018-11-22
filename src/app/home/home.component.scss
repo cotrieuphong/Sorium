@@ -316,20 +316,39 @@
     .rumor-item{
       border: 1px solid $cl-gray;
       border-bottom: 4px solid $cl-primary;
+      border-radius: 2px;
       margin: 1rem;
-      padding: 2rem 1rem 0 1rem;
+      padding: 2rem 1rem 1rem 1rem;
+      transition: all .15s ease-in-out;
+      position: relative;
       h3{
         color: $cl-primary;
         font-weight: 700;
+        font-size: 1.6rem;
+        margin-bottom: .5rem;
+        cursor: pointer;
       }
       h5{
         color: #aaa;
         font-size: 1rem;
-        margin-bottom: 3rem;
+        margin-bottom: 1rem;
+        font-size: 1rem;
       }
       p{
         font-size: 1.5rem;
         font-weight: 500;
+        font-size: 1.2rem;
+        &:before{
+          content: '" ';
+          color: $cl-primary;
+        }
+        &:after{
+          content: ' "';
+          color: $cl-primary;
+        }
+      }
+      &:hover{
+        box-shadow:0 5px 5px -3px rgba($cl-primary,.3), 0 8px 10px 1px rgba($cl-primary,.14), 0 3px 14px 2px rgba($cl-primary,.12);
       }
     }
     &.fade-in{
@@ -344,13 +363,13 @@
     .rumor{
       .rumor-item{
         h3{
-          font-size: 1.5rem;
+          font-size: 1.2rem;
         }
         p{
           font-size: 1rem;
         }
         h5{
-          margin-bottom: 2rem;
+          margin-bottom: 1rem;
         }
       }
     }
@@ -359,10 +378,10 @@
 
 .city-grid{
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px 10px;
   .city-item{
-    height: 100px;
+    height: 200px;
     overflow: hidden;
     position: relative;
     border-radius: 2px;
@@ -382,21 +401,28 @@
       content: '';
       background: rgba(0,0,0,.5);
       opacity: 1;
-      transition: all .35s ease;
+      transition: all .35s ease-in-out;
     }
     p{
       position: absolute;
-      bottom: 0;
-      left: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
       display: block;
+      opacity: 1;
       content: '';
       color: #fff;
       font-weight: 700;
       z-index: 100;
       margin-bottom: 0;
       padding: .2rem;
+      transition: .35s ease-in-out;
+      text-align: center;
     }
     &:hover{
+      p{
+        opacity: 0;
+      }
       &:after{
         opacity: 0.3;
       }

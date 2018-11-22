@@ -1,7 +1,6 @@
 import { Component, ViewEncapsulation, OnInit, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
 import * as $ from 'jquery';
-import { User } from '../_models/user';
 import { UserService } from '../_services/user.service'
 import { AuthenticationService } from '../_services/authentication.service';
 import {MatMenuTrigger} from '@angular/material';
@@ -13,20 +12,20 @@ import {MatMenuTrigger} from '@angular/material';
 })
 export class HeaderComponent implements OnInit {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-  currentUser: User;
+  tokenKey;
   isLoggedin = false;
 
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
     private userService: UserService) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.tokenKey = localStorage.getItem('tokenKey');
   }
 
   ngOnInit() {
     window.addEventListener('scroll', this.scroll, false)
 
-    if(this.currentUser){
+    if(this.tokenKey){
       this.isLoggedin = true;
     }
 

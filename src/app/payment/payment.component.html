@@ -1,0 +1,111 @@
+<app-header></app-header>
+
+<div class="row no-gutters payment-wrapper px-2 py-5">
+  <div class="col-12">
+    <h3>Đặt phòng khách sạn</h3>
+  </div>
+  <div class="col-12 col-md-4 room-info pl-2">
+    <div class="room sm-shadow mb-2">
+      <h3 class="hotel-title">Khách sạn Helios Legend</h3>
+      <div class="hotel-subtitle">
+        <nz-rate nzDisabled nzAllowHalf [ngModel]="4"></nz-rate>
+        <mat-icon matPrefix>location_on</mat-icon>
+        <p>Phố cổ, Hà Nội</p>
+      </div>
+      <div class="room-avatar py-2">
+        <img src="../../assets/img/hotel-1.jpg" class="fluid-img">
+      </div>
+      <h4 class="room-title">Phòng Suite One Bed</h4>
+      <mat-divider></mat-divider>
+      <table>
+        <tr>
+          <td>Số đêm nghỉ:</td>
+          <td>3 đêm</td>
+        </tr>
+        <tr>
+          <td>Tổng số người:</td>
+          <td>2 người</td>
+        </tr>
+        <tr>
+          <td>Tổng tiền</td>
+          <td class="price">1.340.000 đ</td>
+        </tr>
+      </table>
+      <mat-divider></mat-divider>
+    </div>
+    <div class="payment-method sm-shadow mb-2">
+      <h3>Thanh toán tại khách sạn</h3>
+      <p>Hình thức Thanh toán tại Khách sạn cho phép bạn giữ phòng mà không cần thanh toán ngay. Bạn sẽ thanh toán toàn bộ chi phí đặt phòng bằng tiền mặt hoặc thẻ khi nghỉ tại khách sạn. </p>
+    </div>
+  </div>
+  <div class="col-12 col-md-8">
+    <div class="payment-content p-2 mb-2 sm-shadow">
+      <mat-vertical-stepper [linear]="true" #stepper>
+
+        <mat-step [stepControl]="firstForm">
+          <form [formGroup]="firstForm" class="first-form">
+            <ng-template matStepLabel>Thông tin của bạn</ng-template>
+            <mat-form-field class="client-name">
+              <input matInput placeholder="Họ tên" formControlName="name" required>
+            </mat-form-field>
+            <mat-form-field class="client-phone">
+              <input matInput placeholder="Số điện thoại di động" formControlName="phone" required>
+            </mat-form-field>
+            <mat-form-field class="client-email">
+              <input matInput placeholder="Email" formControlName="email" required>
+            </mat-form-field>
+            <div>
+              <button mat-flat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+
+        <mat-step [stepControl]="secondForm">
+            <form [formGroup]="secondForm" class="secondForm">
+              <ng-template matStepLabel>Chi tiết thanh toán</ng-template>
+              <p>Bạn có thể thanh toán tại khách sạn hoặc qua thẻ tín dụng</p>
+              <mat-button-toggle-group #group="matButtonToggleGroup" value="visa">
+                <mat-button-toggle value="visa" matTooltipClass="tooltip-bg" matTooltip="Visa">
+                  <mat-icon fontSet="fab" class="fa-icon" fontIcon="fa-cc-visa"></mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle value="paypal" matTooltipClass="tooltip-bg" matTooltip="Paypal">
+                  <mat-icon fontSet="fab" class="fa-icon" fontIcon="fa-cc-paypal"></mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle value="amazon" matTooltipClass="tooltip-bg" matTooltip="AmazonPay">
+                  <mat-icon fontSet="fab" class="fa-icon" fontIcon="fa-cc-amazon-pay"></mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle value="other" matTooltipClass="tooltip-bg" matTooltip="Thẻ tín dụng khác">
+                  <mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-credit-card"></mat-icon>
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+              <mat-form-field>
+                <input matInput placeholder="số thẻ tín dụng" formControlName="credit" required>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Tên trên thẻ" formControlName="creditName" required>
+              </mat-form-field>
+              <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-flat-button matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step>
+
+          <mat-step>
+            <ng-template matStepLabel>Hoàn tất</ng-template>
+            <div class="confirm" matRipple>
+              <p>Bạn đã đặt phòng thành công</p>
+              <mat-icon>check_circle_outline</mat-icon>
+            </div>
+          </mat-step>
+
+      </mat-vertical-stepper>
+    </div>
+    <div class="mb-2 payment-cancel sm-shadow">
+      <h3>Chính sách hủy đặt phòng</h3>
+      <p>Thẻ tín dụng sẽ bị trừ tiền phòng nếu bạn hủy phòng. Và bạn không thể thay đổi số đêm nghỉ và hạng phòng. Trong trường hợp không đến nhận phòng, thẻ tín dụng của bạn vẫn sẽ bị trừ tiền.</p>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

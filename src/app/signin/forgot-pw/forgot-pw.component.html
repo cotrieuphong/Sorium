@@ -1,0 +1,32 @@
+<div class="signin-wrapper">
+  <div class="row no-gutters signin-content shadow">
+    <div class="col-md-4 d-none d-md-flex ads-box">
+      <img src="../../assets/img/travel.png" alt="">
+      <a routerLink="/">Sorium</a>
+    </div>
+    <form class="col-12 col-md-8 signin-box"  [formGroup]="pwForm" (ngSubmit)="signin()">
+
+      <div class="top-logo d-flex d-md-none">
+        <img src="../../assets/img/sorium.png" routerLink="/">
+      </div>
+      <h2 class="text-md-left text-center">Quên mật khẩu</h2>
+
+      <mat-form-field>
+        <input matInput placeholder="Email" formControlName="Email">
+        <mat-hint align="end">Ví dụ: sorium@gmail.com</mat-hint>
+        <mat-error *ngIf="Email.invalid && Email.touched">
+          Email của bạn chưa đúng
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-flat-button [disabled]="pwForm.invalid" type="submit">
+        <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+        <p *ngIf="!isLoading">Xác nhận</p>
+      </button>
+      <div class="actions">
+        <p>Chưa có tài khoản? <a routerLink="/dang-ky">Tạo mới</a></p>
+        <p>Đã có tài khoản? <a routerLink="/dang-nhập">Đăng nhập</a></p>
+      </div>
+    </form>
+  </div>
+</div>

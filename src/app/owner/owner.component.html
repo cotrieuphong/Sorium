@@ -1,0 +1,106 @@
+<app-header></app-header>
+<div class="row no-gutters py-5 px-2 owner-hotel-wrapper">
+  <div class="col-12 owner-hotel sm-shadow">
+    <h2>Đăng ký trở thành chủ khách sạn.</h2>
+    <p>Vui lòng cung cấp mọi thông tin được yêu cầu trừ khi có đánh dấu không bắt buộc.</p>
+    <form [formGroup]="ownerForm" (ngSubmit)="signup()">
+      {{ownerForm.value | json}}
+
+      <mat-form-field>
+        <input matInput formControlName="HotelName" placeholder="Tên khách sạn" required>
+        <mat-error *ngIf="HotelName.invalid && HotelName.touched">Vui lòng nhập tên khách sạn</mat-error>
+        <mat-hint >Ví dụ: Khách sạn Sorium</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="hotel-email">
+        <input matInput formControlName="HotelEmail" placeholder="Email khách sạn" required>
+        <mat-error *ngIf="HotelEmail.invalid && HotelEmail.touched">
+          Vui lòng nhập email khách sạn
+        </mat-error>
+        <mat-hint >Ví dụ: sorium@gmail.com</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="hotel-phone">
+        <input matInput formControlName="HotelPhoneNumber" placeholder="Số điện thoại khách sạn" required>
+        <mat-error *ngIf="HotelPhoneNumber.invalid && HotelPhoneNumber.touched">
+          Vui lòng nhập số điện thoại của khách sạn
+        </mat-error>
+        <mat-hint >Số máy bàn hoắc di động đều được chấp nhận</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput formControlName="HotelAddress" placeholder="Địa chỉ khách sạn" required>
+        <mat-error *ngIf="HotelAddress.invalid && HotelAddress.touched">
+          Vui lòng nhập địa chỉ của khách sạn
+        </mat-error>
+        <mat-hint >Ví dụ: Số 69 đường Kim Mã</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="hotel-province">
+        <input matInput formControlName="ProvinceCode" placeholder="Tên tỉnh thành" [matAutocomplete]="pauto" required>
+        <mat-autocomplete #pauto="matAutocomplete"
+        autoActiveFirstOption
+        [displayWith]="displayFn">
+           <mat-option *ngFor="let city of filteredCitys | async" [value]="city">
+             {{city.ProvinceName}}
+           </mat-option>
+         </mat-autocomplete>
+        <mat-error *ngIf="ProvinceCode.invalid">
+          Vui lòng nhập tên tỉnh thành của khách sạn
+        </mat-error>
+        <mat-hint >Ví dụ: Hà Nội</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="hotel-district">
+        <input matInput formControlName="DistrictCode" placeholder="Tên quận" [matAutocomplete]="dauto" required>
+        <mat-autocomplete #dauto="matAutocomplete"
+        autoActiveFirstOption
+        [displayWith]="displaydFn">
+           <mat-option *ngFor="let district of filteredDistricts | async" [value]="district">
+             {{district.DistrictName}}
+           </mat-option>
+         </mat-autocomplete>
+        <mat-error *ngIf="DistrictCode.invalid">
+          Vui lòng nhập tên quận của khách sạn
+        </mat-error>
+        <mat-hint >Ví dụ: Ba Đình</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="hotel-tax">
+        <input matInput formControlName="TaxCode" placeholder="Mã số thuế" required>
+        <mat-error *ngIf="TaxCode.invalid && TaxCode.touched">
+          Vui lòng nhập mã số thuế của khách sạn
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="hotel-tax">
+        <mat-select placeholder="Đánh giá sao" formControlName="HotelStar" required>
+          <mat-option value="0.5">0.5</mat-option>
+          <mat-option value="1">1</mat-option>
+          <mat-option value="1.5">1.5</mat-option>
+          <mat-option value="2">2</mat-option>
+          <mat-option value="2.5">2.5</mat-option>
+          <mat-option value="3">3</mat-option>
+          <mat-option value="3.5">3.5</mat-option>
+          <mat-option value="4">4</mat-option>
+          <mat-option value="4.5">4.5</mat-option>
+          <mat-option value="5">5</mat-option>
+        </mat-select>
+        <mat-error *ngIf="TaxCode.invalid && TaxCode.touched">
+          Vui lòng nhập mã số thuế của khách sạn
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput placeholder="Miêu tả khách sạn" formControlName="Description"></textarea>
+      </mat-form-field>
+      <div class="paper">
+        <p>Hình ảnh giấy tờ chứng minh:</p>
+        <div class="file-upload">
+          <nz-upload class="upload-list-inline"
+            nzListType="picture" nzLimit="6"
+            [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+            [nzMultiple]="true">
+            <button type="button" nz-button>
+              <span><i nz-icon type="upload"></i> Upload</span>
+            </button>
+          </nz-upload>
+        </div>
+      </div>
+      <button mat-flat-button type="submit" [disabled]="ownerForm.invalid">Đăng ký</button>
+    </form>
+  </div>
+</div>
+<app-footer></app-footer>

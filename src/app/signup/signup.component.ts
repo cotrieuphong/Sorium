@@ -27,41 +27,40 @@ export class SignupComponent implements OnInit {
   ngOnInit(){
 
     this.signupForm = this.fb.group({
-      firstName: ['', [
+      FirstName: ['', [
         Validators.required,
         Validators.maxLength(30)
       ]],
-      lastName: ['', [
+      LastName: ['', [
         Validators.required,
         Validators.maxLength(50)
       ]],
-      email: ['', [
+      Email: ['', [
         Validators.required,
         Validators.email
       ]],
-      password: ['', [
+      Password: ['', [
         Validators.required,
         Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+)$'),
         Validators.minLength(6)
       ]],
-      phone: [''],
-      address:[''],
-      roleId:['3'],
+      SucRedirectUrl: window.location.origin + '/dang-nhap',
+      FailRedirectUrl: window.location.origin + '/dang-ky'
     });
   }
 
-  get firstName() {
-    return this.signupForm.get('firstName')
+  get FirstName() {
+    return this.signupForm.get('FirstName')
   }
 
-  get lastName() {
-    return this.signupForm.get('lastName')
+  get LastName() {
+    return this.signupForm.get('LastName')
   }
-  get email() {
-    return this.signupForm.get('email')
+  get Email() {
+    return this.signupForm.get('Email')
   }
-  get password() {
-    return this.signupForm.get('password')
+  get Password() {
+    return this.signupForm.get('Password')
   }
 
   signup() {
@@ -79,7 +78,7 @@ export class SignupComponent implements OnInit {
         nzPauseOnHover: true
       })
       setTimeout(function() {
-        self.router.navigate(['/dang-nhap'])
+        self.router.navigate(['/xac-nhan'])
       }, 1000)
     },
     error => {
