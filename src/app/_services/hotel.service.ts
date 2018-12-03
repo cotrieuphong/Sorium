@@ -32,12 +32,21 @@ export class HotelService {
 
   constructor(private http: HttpClient) { }
 
-  getImg(){
-    return this.http.get('https://api.myjson.com/bins/jvb9m')
-  }
 
-	getHotel(searchData){
-		return this.http.post(this.soriumUrl + 'Hotel/GetPaging ',searchData)
+	getHotel(searchData) {
+		return this.http.post(this.soriumUrl + 'Hotel/GetPaging ',searchData, httpOptions)
+	}
+
+	getHotelById(id, formData){
+		return this.http.post(this.soriumUrl + 'Hotel/GetItemByClient/'+id, formData, httpOptions)
+	}
+
+	getRoomById(id) {
+		return this.http.get(this.soriumUrl + 'Room/GetDetail/' + id, httpOptions)
+	}
+
+	sendOrder(formData) {
+		return this.http.post(this.soriumUrl + 'Order/Insert', formData, httpOptions)
 	}
 
 }

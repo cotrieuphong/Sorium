@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import * as $ from 'jquery';
 import { UserService } from '../_services/user.service'
 import { AuthenticationService } from '../_services/authentication.service';
+import { NzNotificationService } from 'ng-zorro-antd';
 import {MatMenuTrigger} from '@angular/material';
 @Component({
   selector: 'app-header',
@@ -14,26 +15,29 @@ export class HeaderComponent implements OnInit {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   tokenKey;
   isLoggedin = false;
-
+  userInfo;
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private userService: UserService) {
+    private userService: UserService,
+    private nz: NzNotificationService) {
     this.tokenKey = localStorage.getItem('tokenKey');
+    if(this.tokenKey){
+      this.userService.getUser(this.tokenKey).subscribe((res:any) => {
+        if(!res.Data.UserAvatar){
+          res.Data.UserAvatar = './../../assets/img/user.png'
+        }
+        this.userInfo = res.Data;
+        this.isLoggedin = true;
+      },
+      error => {
+      });
+
+    }
   }
 
   ngOnInit() {
     window.addEventListener('scroll', this.scroll, false)
-
-    if(this.tokenKey){
-      this.isLoggedin = true;
-    }
-
-    $(function(){
-      $('.menu-btn').click(function(){
-
-      })
-    })
 
   }
 

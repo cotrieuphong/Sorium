@@ -32,12 +32,20 @@ export class ProvinceService {
 
   constructor(private http: HttpClient) { }
 
-  getProvince(){
-    return this.http.get(this.soriumUrl + 'province/getprovince')
+  getProvince() {
+    return this.http.get(this.soriumUrl + 'province/getprovince', httpOptions)
   }
 
+	getProvinceById(id) {
+		return this.http.get(this.soriumUrl + 'Province/GetItem/' + id, httpOptions)
+	}
+
+	getProvincePaging(paging) {
+		return this.http.post(this.soriumUrl + "Province/GetPaging", paging, httpOptions)
+	}
+
 	getDistrict(data){
-		return this.http.post(this.soriumUrl + "District/GetPaging", data)
+		return this.http.post(this.soriumUrl + "District/GetPaging", data, httpOptions)
 	}
 
 }

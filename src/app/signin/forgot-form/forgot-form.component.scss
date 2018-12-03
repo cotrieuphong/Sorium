@@ -5,47 +5,73 @@
   src: url(../../../assets/font/PlaylistScript.otf);
 }
 
-.signup-confirm-wrapper{
+.signin-wrapper{
   width: 100%;
   min-height: 100vh;
   background: linear-gradient(135deg, #ff5f6d, #ffc371);
   display: flex;
-  .signup-content{
+  .signin-content{
     margin: auto;
     width: 90%;
     max-width: 1000px;
-    overflow: hidden;
     border-radius: 2px;
-    .signup-confirm{
+    position: relative;
+    .mat-progress-bar{
+      position: absolute;
+      display: block;
+      bottom: 100%;
+      width: 100%;
+      .mat-progress-bar-buffer{
+        background: transparent;
+      }
+    }
+    .signin-box{
       padding: 1rem;
       background: $cl-white;
-      text-align: center;
+      border-radius: 0 2px 2px 0;
+      .mat-form-field{
+        width: 100%;
+      }
       .top-logo{
+        margin-bottom: 1rem;
         img{
           width: 15rem;
           margin: auto;
           cursor: pointer;
         }
       }
-      h3{
-        font-size: 1.6rem;
-        color: $cl-primary;
-        margin-bottom: .5rem;
-        margin-top: 5rem;
-      }
-      p{
-        margin-bottom: .5rem;
-      }
       button{
-        margin-bottom: 5rem;
+        margin-bottom: 1rem;
+        width: 105px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        p{
+          margin: 0;
+        }
+        .mat-spinner{
+          circle{
+            stroke: $cl-white;
+          }
+        }
       }
       @media (max-width: 767px){
         button{
           width: 100%;
         }
       }
+      .actions{
+        font-size: .9rem;
+        p{
+          margin: 0;
+        }
+        a:hover{
+          text-decoration: underline
+        }
+      }
     }
     .ads-box{
+      border-radius: 2px 0 0 2px;
       align-items: center;
       overflow: hidden;
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364) center no-repeat;

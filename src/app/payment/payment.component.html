@@ -6,29 +6,29 @@
   </div>
   <div class="col-12 col-md-4 room-info pl-2">
     <div class="room sm-shadow mb-2">
-      <h3 class="hotel-title">Khách sạn Helios Legend</h3>
+      <h3 class="hotel-title">{{Hotel?.Name}}</h3>
       <div class="hotel-subtitle">
-        <nz-rate nzDisabled nzAllowHalf [ngModel]="4"></nz-rate>
+        <nz-rate nzDisabled nzAllowHalf [ngModel]="room?.Star"></nz-rate>
         <mat-icon matPrefix>location_on</mat-icon>
-        <p>Phố cổ, Hà Nội</p>
+        <p>{{Hotel?.Address}}, {{Hotel?.DistrictName}}, {{Hotel?.ProvinceName}}</p>
       </div>
       <div class="room-avatar py-2">
-        <img src="../../assets/img/hotel-1.jpg" class="fluid-img">
+        <img src="https://luxuria-api.azurewebsites.net{{room?.Avatar}}" class="fluid-img">
       </div>
-      <h4 class="room-title">Phòng Suite One Bed</h4>
+      <h4 class="room-title">{{room?.Name}}</h4>
       <mat-divider></mat-divider>
       <table>
         <tr>
           <td>Số đêm nghỉ:</td>
-          <td>3 đêm</td>
+          <td>{{day}} đêm</td>
         </tr>
         <tr>
           <td>Tổng số người:</td>
-          <td>2 người</td>
+          <td>{{people}} người</td>
         </tr>
         <tr>
           <td>Tổng tiền</td>
-          <td class="price">1.340.000 đ</td>
+          <td class="price">{{money}} đ</td>
         </tr>
       </table>
       <mat-divider></mat-divider>
@@ -42,25 +42,40 @@
     <div class="payment-content p-2 mb-2 sm-shadow">
       <mat-vertical-stepper [linear]="true" #stepper>
 
-        <mat-step [stepControl]="firstForm">
-          <form [formGroup]="firstForm" class="first-form">
+        <mat-step [stepControl]="firstForm" [completed]="isCompleted">
+          <form [formGroup]="firstForm" class="first-form" (ngSubmit)="onSubmit()" >
             <ng-template matStepLabel>Thông tin của bạn</ng-template>
             <mat-form-field class="client-name">
-              <input matInput placeholder="Họ tên" formControlName="name" required>
+              <input matInput placeholder="Họ tên" formControlName="GuestName" required>
+              <mat-error *ngIf="GuestName.errors?.required">
+                Vui lòng nhập Họ tên
+              </mat-error>
             </mat-form-field>
             <mat-form-field class="client-phone">
-              <input matInput placeholder="Số điện thoại di động" formControlName="phone" required>
+              <input matInput placeholder="Số điện thoại di động" formControlName="GuestPhoneNumber" required>
+              <mat-error *ngIf="GuestPhoneNumber.errors?.pattern">
+                Vui lòng nhập số từ 0 - 9
+              </mat-error>
+              <mat-error *ngIf="GuestPhoneNumber.errors?.minlength && !GuestPhoneNumber.errors?.pattern">
+                Tối thiểu 9 ký tự
+              </mat-error>
+              <mat-error *ngIf="GuestPhoneNumber.errors?.maxlength && !GuestPhoneNumber.errors?.pattern">
+                Tối đa 10 ký tự
+              </mat-error>
             </mat-form-field>
             <mat-form-field class="client-email">
-              <input matInput placeholder="Email" formControlName="email" required>
+              <input matInput placeholder="Email" formControlName="GuestEmail" required>
             </mat-form-field>
+            <mat-error *ngIf="GuestEmail.errors?.email">
+              Sai định dạng email
+            </mat-error>
             <div>
-              <button mat-flat-button matStepperNext>Next</button>
+              <button mat-flat-button matStepperNext type="submit">Next</button>
             </div>
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="secondForm">
+        <!-- <mat-step [stepControl]="secondForm">
             <form [formGroup]="secondForm" class="secondForm">
               <ng-template matStepLabel>Chi tiết thanh toán</ng-template>
               <p>Bạn có thể thanh toán tại khách sạn hoặc qua thẻ tín dụng</p>
@@ -89,7 +104,7 @@
                 <button mat-flat-button matStepperNext>Next</button>
               </div>
             </form>
-          </mat-step>
+          </mat-step> -->
 
           <mat-step>
             <ng-template matStepLabel>Hoàn tất</ng-template>
@@ -103,7 +118,7 @@
     </div>
     <div class="mb-2 payment-cancel sm-shadow">
       <h3>Chính sách hủy đặt phòng</h3>
-      <p>Thẻ tín dụng sẽ bị trừ tiền phòng nếu bạn hủy phòng. Và bạn không thể thay đổi số đêm nghỉ và hạng phòng. Trong trường hợp không đến nhận phòng, thẻ tín dụng của bạn vẫn sẽ bị trừ tiền.</p>
+      <p>Sorium sẽ thống báo với khách sạn nếu bạn muốn hủy đặt phòng. Khách sạn sẽ liên hệ với bạn để thông báo thông tin chi tiết.</p>
     </div>
   </div>
 </div>

@@ -17,6 +17,7 @@ export class AuthenticationService {
   logout() {
       // remove user from local storage to log user out
       localStorage.removeItem('tokenKey');
+      sessionStorage.removeItem('id');
       this.router.navigate(['/dang-nhap']);
   }
 }

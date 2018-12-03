@@ -10,17 +10,18 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ProvinceComponent implements OnInit {
 
+  allProvince;
+
   constructor(private provinceService: ProvinceService) { }
 
   ngOnInit() {
+
     this.provinceService.getProvince().subscribe((res: any) => {
-      // let rand = res.DataList[Math.floor(Math.random() * res.DataList.length)];
-      // console.log(rand)
-      this.getRandom(res.DataList, 5);
+      this.allProvince = res.DataList;
+      console.log(res);
     })
   }
   getRandom(arr, count) {
-
     let shuffled = arr.sort(function() {
       return .5 - Math.random()
     });

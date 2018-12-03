@@ -3,6 +3,7 @@ import {FormControl, FormGroup, FormBuilder, FormGroupDirective, NgForm, Validat
 import { NzNotificationService } from 'ng-zorro-antd';
 import { Router } from "@angular/router";
 import { first } from 'rxjs/operators';
+import { UserService } from '../../_services/user.service';
 import { AuthenticationService } from '../../_services/authentication.service'
 @Component({
   selector: 'app-forgot-pw',
@@ -19,14 +20,16 @@ export class ForgotPwComponent implements OnInit {
     private fb: FormBuilder,
     private nz: NzNotificationService,
     private router: Router,
-    private authenticationService: AuthenticationService) {}
+    private authenticationService: AuthenticationService,
+    private userService: UserService) {}
 
   ngOnInit(){
     this.pwForm = this.fb.group({
       Email: ['', [
         Validators.required,
         Validators.email
-      ]]
+      ]],
+      UrlForm: window.location.origin + '%23/doi-mat-khau'
     });
   }
 
@@ -34,29 +37,24 @@ export class ForgotPwComponent implements OnInit {
     return this.pwForm.get('Email')
   }
 
-  signin() {
+  forgetPw() {
     this.isLoading = true;
     const self = this;
     if (self.pwForm.invalid) {
       this.isLoading = false;
       return;
     }
-    this.authenticationService.login(self.pwForm.value).pipe(first()).subscribe(data => {
+    this.userService.forgotPw(self.pwForm.value).pipe(first()).subscribe(data => {
       self.isLoading = false;
-      self.nz.create('success', 'Thành công', 'Đăng nhập thành công', {
+      self.nz.create('success', 'Thành công', 'Mời bạn kiểm tra emai', {
         nzDuration: 2500,
         nzAnimate: true,
         nzPauseOnHover: true
       })
-      setTimeout(function() {
-        // localStorage.setItem('currentUser', JSON.stringify(data));
-        localStorage.setItem('tokenKey', data.Data.AccessToken)
-        self.router.navigate(['/'])
-      }, 1000)
     },
     error => {
       self.isLoading = false;
-      self.nz.create('error', 'Lỗi', 'Sai thông tin đăng nhập', {
+      self.nz.create('error', 'Lỗi', 'Sai email', {
         nzDuration: 2500,
         nzAnimate: true,
         nzPauseOnHover: true

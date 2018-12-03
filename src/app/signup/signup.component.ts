@@ -25,7 +25,8 @@ export class SignupComponent implements OnInit {
     private userService: UserService) {}
 
   ngOnInit(){
-
+    sessionStorage.removeItem('Id');
+    localStorage.removeItem('tokenKey');
     this.signupForm = this.fb.group({
       FirstName: ['', [
         Validators.required,
@@ -44,9 +45,11 @@ export class SignupComponent implements OnInit {
         Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+)$'),
         Validators.minLength(6)
       ]],
-      SucRedirectUrl: window.location.origin + '/dang-nhap',
-      FailRedirectUrl: window.location.origin + '/dang-ky'
+      SucRedirectUrl: window.location.origin + '%23/dang-nhap',
+      FailRedirectUrl: window.location.origin + '%23/dang-ky'
     });
+
+
   }
 
   get FirstName() {
@@ -70,24 +73,35 @@ export class SignupComponent implements OnInit {
       this.isLoading = false;
       return;
     }
-    this.userService.signup(self.signupForm.value).pipe(first()).subscribe(data => {
+    this.userService.signup(self.signupForm.value).pipe(first()).subscribe((data: any) => {
       self.isLoading = false;
       self.nz.create('success', 'Thành công', 'Đăng ký thành công', {
         nzDuration: 2500,
         nzAnimate: true,
         nzPauseOnHover: true
-      })
+      });
+      sessionStorage.setItem('Id', data.Data.Id);
       setTimeout(function() {
         self.router.navigate(['/xac-nhan'])
       }, 1000)
     },
     error => {
-      self.isLoading = false;
-      self.nz.create('error', 'Lỗi', 'Sai thông tin đăng ký', {
-        nzDuration: 2500,
-        nzAnimate: true,
-        nzPauseOnHover: true
-      });
+      console.log(error.error.Errors);
+      if(error.error.Errors[0].Code == 2){
+        self.isLoading = false;
+        self.nz.create('error', 'Lỗi', 'Email đã tồn tại', {
+          nzDuration: 2500,
+          nzAnimate: true,
+          nzPauseOnHover: true
+        });
+      }else{
+        self.isLoading = false;
+        self.nz.create('error', 'Lỗi', 'Sai thông tin đăng ký', {
+          nzDuration: 2500,
+          nzAnimate: true,
+          nzPauseOnHover: true
+        });
+      }
     }
   )
   }

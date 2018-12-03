@@ -1,29 +1,37 @@
 <app-header></app-header>
-<div class="row no-gutters py-5 px-2 owner-hotel-wrapper">
+<div class="row no-gutters p-5 owner-hotel-wrapper">
   <div class="col-12 owner-hotel sm-shadow">
     <h2>Đăng ký trở thành chủ khách sạn.</h2>
     <p>Vui lòng cung cấp mọi thông tin được yêu cầu trừ khi có đánh dấu không bắt buộc.</p>
     <form [formGroup]="ownerForm" (ngSubmit)="signup()">
-      {{ownerForm.value | json}}
+      <!-- {{ownerForm.value | json}} -->
 
       <mat-form-field>
         <input matInput formControlName="HotelName" placeholder="Tên khách sạn" required>
-        <mat-error *ngIf="HotelName.invalid && HotelName.touched">Vui lòng nhập tên khách sạn</mat-error>
+        <mat-error *ngIf="HotelName.errors?.required">Vui lòng nhập tên khách sạn</mat-error>
         <mat-hint >Ví dụ: Khách sạn Sorium</mat-hint>
       </mat-form-field>
       <mat-form-field class="hotel-email">
         <input matInput formControlName="HotelEmail" placeholder="Email khách sạn" required>
-        <mat-error *ngIf="HotelEmail.invalid && HotelEmail.touched">
+        <mat-error *ngIf="HotelEmail.errors?.required">
           Vui lòng nhập email khách sạn
+        </mat-error>
+        <mat-error *ngIf="HotelEmail.errors?.email">
+          Sai định dạng email
         </mat-error>
         <mat-hint >Ví dụ: sorium@gmail.com</mat-hint>
       </mat-form-field>
       <mat-form-field class="hotel-phone">
         <input matInput formControlName="HotelPhoneNumber" placeholder="Số điện thoại khách sạn" required>
-        <mat-error *ngIf="HotelPhoneNumber.invalid && HotelPhoneNumber.touched">
-          Vui lòng nhập số điện thoại của khách sạn
+        <mat-error *ngIf="HotelPhoneNumber.errors?.pattern">
+          Vui lòng nhập số từ 0 - 9
         </mat-error>
-        <mat-hint >Số máy bàn hoắc di động đều được chấp nhận</mat-hint>
+        <mat-error *ngIf="HotelPhoneNumber.errors?.minlength && !HotelPhoneNumber.errors?.pattern">
+          Tối thiểu 9 ký tự
+        </mat-error>
+        <mat-error *ngIf="HotelPhoneNumber.errors?.maxlength && !HotelPhoneNumber.errors?.pattern">
+          Tối đa 10 ký tự
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput formControlName="HotelAddress" placeholder="Địa chỉ khách sạn" required>
@@ -68,38 +76,41 @@
       </mat-form-field>
       <mat-form-field class="hotel-tax">
         <mat-select placeholder="Đánh giá sao" formControlName="HotelStar" required>
-          <mat-option value="0.5">0.5</mat-option>
-          <mat-option value="1">1</mat-option>
-          <mat-option value="1.5">1.5</mat-option>
-          <mat-option value="2">2</mat-option>
-          <mat-option value="2.5">2.5</mat-option>
-          <mat-option value="3">3</mat-option>
-          <mat-option value="3.5">3.5</mat-option>
-          <mat-option value="4">4</mat-option>
-          <mat-option value="4.5">4.5</mat-option>
-          <mat-option value="5">5</mat-option>
+          <mat-option value="0.5">0.5 sao</mat-option>
+          <mat-option value="1">1 sao</mat-option>
+          <mat-option value="1.5">1.5 sao</mat-option>
+          <mat-option value="2">2 sao</mat-option>
+          <mat-option value="2.5">2.5 sao</mat-option>
+          <mat-option value="3">3 sao</mat-option>
+          <mat-option value="3.5">3.5 sao</mat-option>
+          <mat-option value="4">4 sao</mat-option>
+          <mat-option value="4.5">4.5 sao</mat-option>
+          <mat-option value="5">5 sao</mat-option>
         </mat-select>
         <mat-error *ngIf="TaxCode.invalid && TaxCode.touched">
           Vui lòng nhập mã số thuế của khách sạn
         </mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="hotel-description">
         <textarea matInput placeholder="Miêu tả khách sạn" formControlName="Description"></textarea>
       </mat-form-field>
       <div class="paper">
         <p>Hình ảnh giấy tờ chứng minh:</p>
-        <div class="file-upload">
-          <nz-upload class="upload-list-inline"
-            nzListType="picture" nzLimit="6"
-            [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
-            [nzMultiple]="true">
-            <button type="button" nz-button>
-              <span><i nz-icon type="upload"></i> Upload</span>
-            </button>
-          </nz-upload>
+        <div class="f-upload">
+          <button mat-flat-button type="button" class="upload-btn" matTooltip="Upload ảnh giấy tờ chứng minh" matTooltipPosition="above">
+            <label for="img-upload"><mat-icon *ngIf="!isUploading">cloud_upload</mat-icon>
+            <mat-spinner diameter="25" *ngIf="isUploading"></mat-spinner></label>
+            <input id="img-upload" (change)="galleryUpload($event)" multiple="true" type="file" class="file-upload" accept="image/jpeg, image/png, image/jpg">
+          </button>
+          <div class="preview-img" gallerize>
+            <div class="preview-item" *ngFor="let data of galleryImageList">
+              <img src="{{data}}" alt="Ảnh khách sạn" class="fluid-img">
+              <button class="delete" type="button" (click)="deleteImage(data)" mat-icon-button><mat-icon >close</mat-icon></button>
+            </div>
+          </div>
         </div>
       </div>
-      <button mat-flat-button type="submit" [disabled]="ownerForm.invalid">Đăng ký</button>
+      <button mat-flat-button type="submit" class="mt-3 submit-btn" [disabled]="ownerForm.invalid"><p *ngIf="!isSubmiting">Đăng ký</p><mat-spinner diameter="25" *ngIf="isSubmiting"></mat-spinner></button>
     </form>
   </div>
 </div>

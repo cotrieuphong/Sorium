@@ -18,7 +18,7 @@
 
     <!-- HERO START -->
 
-    <div class="col-12">
+    <div class="col-12 hero-wrapper">
         <div class="row no-gutters hero">
 
             <!-- SEARCH START -->
@@ -36,7 +36,7 @@
                     <input matInput
                     placeholder="Ví dụ: Hà Nội" formControlName="searchLocation"
                     [matAutocomplete]="auto">
-                    <button mat-button *ngIf="searchLocation" matSuffix mat-icon-button (click)="searchLocation=''">
+                    <button mat-button matSuffix mat-icon-button type="button" (click)="resetInput()" *ngIf="searchLocation.value">
                       <mat-icon>close</mat-icon>
                     </button>
                     <mat-autocomplete #auto="matAutocomplete"
@@ -56,7 +56,7 @@
                     formControlName="searchDate" placeholder="Bạn muốn đi du lịch trong bao lâu">
                   </mat-form-field>
 
-                  <mat-form-field class="search-peoples col-12 col-md-8 shadow">
+                  <mat-form-field class="search-peoples col-12 col-md-8 shadow" (click)="setPpl()">
                     <mat-icon matPrefix>people</mat-icon>
                     <input matInput placeholder="Tổng số người" formControlName="peopleCount" autocomplete="off" class="prevent-input">
                     <div class="people-count md-shadow">
@@ -67,7 +67,6 @@
                       <button mat-button mat-icon-button type="button" (click)="addPeople()">
                         <mat-icon matSuffix>add_circle_outline</mat-icon>
                       </button>
-
                     </div>
                   </mat-form-field>
 
@@ -93,59 +92,43 @@
                         Có gì mới
                       </ng-template>
                       <div class="row no-gutters tab-content">
-                        <div class="col-12 col-sm-6 pr-2 pb-2 content-wrapper">
+                        <div class="col-12 col-sm-6 content-wrapper" *ngFor="let hotel of promoteHotel">
                             <div class="new-hotel">
-                                <img src="../assets/img/ha-noi.jpg" alt="">
+                                <img src="{{hotel.Avatar}}" alt="">
                                 <div class="new-hotel-detail">
-                                    <h3>The Millennials</h3>
-                                    <p>Hà Nội</p>
-                                    <button mat-stroked-button>Đặt phòng ngay</button>
+                                    <div class="new-hotel-detail-title">
+                                      <h3 (click)="selectHotel(hotel.Id)">{{hotel.Name}}</h3>
+                                      <p>{{hotel.Address}}, {{hotel.DistrictName}}, {{hotel.ProvinceName}}</p>
+                                    </div>
+                                    <button mat-stroked-button (click)="selectHotel(hotel.Id)">Đặt phòng ngay</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-6 pl-2 pb-2 content-wrapper">
-                            <div class="new-hotel">
-                                <img src="../assets/img/ho-chi-minh.jpg" alt="">
-                                <div class="new-hotel-detail">
-                                    <h3>The House</h3>
-                                    <p>TP Hồ Chí Minh</p>
-                                    <button mat-stroked-button>Đặt phòng ngay</button>
+                        <div class="col-12 col-sm-6 content-wrapper">
+                            <div class="owner">
+                                <div class="owner-img">
+                                  <img src="./../assets/img/owner.jpg" class="fluid-img">
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6 d-sm-block pt-2 pr-2 content-wrapper">
-                            <div class="new-hotel">
-                                <img src="../assets/img/da-nang.jpg" alt="">
-                                <div class="new-hotel-detail">
-                                    <h3>The Spa</h3>
-                                    <p>Đà Nẵng</p>
-                                    <button mat-stroked-button>Đặt phòng ngay</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6 d-sm-block pt-2 pl-2 content-wrapper">
-                            <div class="new-hotel">
-                                <img src="../assets/img/nha-trang.jpg" alt="">
-                                <div class="new-hotel-detail">
-                                    <h3>The Beach House</h3>
-                                    <p>Nha Trang</p>
-                                    <button mat-stroked-button>Đặt phòng ngay</button>
+                                <div class="owner-detail">
+                                  <h3 routerLink="/chu-khach-san">Đăng khách sạn trên Sorium</h3>
+                                  <p>Không mất phí. Và luôn như vậy</p>
+                                  <button mat-stroked-button routerLink="/chu-khach-san">Trở thành chủ khách sạn</button>
                                 </div>
                             </div>
                         </div>
                       </div>
                     </mat-tab>
-                    <mat-tab isActive>
+                    <mat-tab>
                       <ng-template mat-tab-label>
                         <mat-icon>public</mat-icon>
                         Khám phá
                       </ng-template>
                       <div class="row no-gutters tab-content">
                           <div class="col-12 my-2 new-content">
-                            <img src="../assets/img/ha-noi.jpg" alt="">
+                            <img src="./../assets/img/ha-noi.jpg" alt="">
                           </div>
                           <div class="col-12 my-2 new-content">
-                            <img src="../assets/img/ho-chi-minh.jpg" alt="">
+                            <img src="./../assets/img/ho-chi-minh.jpg" alt="">
                           </div>
                       </div>
                     </mat-tab>
@@ -169,9 +152,9 @@
     <!-- HERO END -->
 
     <!-- RUMOR START -->
-    <div class="col-12 rumor-wrapper px-5">
-      <div class="row no-gutters text-center">
-        <h2 class="col-12 py-5">Tiếng lành đồn xa</h2>
+    <div class="col-12 rumor-wrapper text-center">
+      <h2>Tiếng lành đồn xa</h2>
+      <div class="rumor-bg row no-gutters">
         <div class="col-12 col-lg-4 rumor" *ngFor="let cm of comments">
           <div class="rumor-item">
             <h3 routerLink="/chi-tiet">{{cm.hotelName}}</h3>
@@ -186,40 +169,16 @@
 
     <!-- CITY START -->
 
-    <div class="col-12 city-wrapper">
-      <h3 class="text-center py-5">Điểm đến phổ biến</h3>
-      <div class="city-grid p-5">
-        <div class="city-item">
-          <img src="../../assets/img/ha-noi.jpg" alt="">
-          <p>Hà Nội</p>
+    <div class="col-12 city-wrapper text-center">
+      <h2>Điểm đến phổ biến</h2>
+      <div class="city-grid">
+        <div class="city-item" *ngFor="let pro of promoteProvince" routerLink="/tinh-thanh/chi-tiet/{{pro.Id}}">
+          <img src="./../../assets/img/ha-noi.jpg" alt="">
+          <p>{{pro.ProvinceName}}</p>
         </div>
-        <div class="city-item">
-          <img src="../../assets/img/ho-chi-minh.jpg" alt="">
-          <p>Hồ Chí Minh</p>
-        </div>
-        <div class="city-item">
-          <img src="../../assets/img/nha-trang.jpg" alt="">
-          <p>Nha Trang</p>
-        </div>
-        <div class="city-item">
-          <img src="../../assets/img/da-nang.jpg" alt="">
-          <p>Đà Nẵng</p>
-        </div>
-        <div class="city-item">
-          <img src="../../assets/img/ha-noi.jpg" alt="">
-          <p>Hà Nội</p>
-        </div>
-        <div class="city-item">
-          <img src="../../assets/img/ho-chi-minh.jpg" alt="">
-          <p>Hồ Chí Minh</p>
-        </div>
-        <div class="city-item">
-          <img src="../../assets/img/nha-trang.jpg" alt="">
-          <p>Nha Trang</p>
-        </div>
-        <div class="city-item">
-          <img src="../../assets/img/da-nang.jpg" alt="">
-          <p>Đà Nẵng</p>
+        <div class="city-item" routerLink="/tinh-thanh">
+          <img src="./../../assets/img/da-nang.jpg" alt="">
+          <p>Xem tất cả điểm đến</p>
         </div>
       </div>
     </div>

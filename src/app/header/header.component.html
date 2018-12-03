@@ -13,9 +13,9 @@
           <button mat-button *ngIf="isLoggedin" [matMenuTriggerFor]="profile" class="ml-1 profile menu-btn">
             <div class="profile-icon">
               <div class="profile-img mr-1">
-                <img src="../../assets/img/ha-noi.jpg">
+                <img src="https://luxuria-api.azurewebsites.net{{userInfo.UserAvatar}}">
               </div>
-              <p>Phong</p>
+              <p>{{userInfo.LastName}}</p>
             </div>
           </button>
           <mat-menu #profile="matMenu" yPosition="below" [overlapTrigger]="false">
@@ -40,9 +40,9 @@
         <button mat-button *ngIf="isLoggedin" [matMenuTriggerFor]="profile" class="ml-auto profile menu-btn d-md-none">
           <div class="profile-icon">
             <div class="profile-img mr-1">
-              <img src="../../assets/img/ha-noi.jpg">
+              <img src="https://luxuria-api.azurewebsites.net{{userInfo.UserAvatar}}">
             </div>
-            <p>Phong</p>
+            <p>{{userInfo.LastName}}</p>
           </div>
         </button>
         <mat-menu #profile="matMenu" yPosition="below" [overlapTrigger]="false">
@@ -67,7 +67,7 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu" [overlapTrigger]="false">
-          <button mat-menu-item routerLink="/dang-nhap">
+          <button mat-menu-item routerLink="/chu-khach-san">
             <mat-icon>home</mat-icon>
             <span>Trở thành chủ khách sạn</span>
           </button>
@@ -82,7 +82,7 @@
         </mat-menu>
     </mat-toolbar>
 </header>
-<div class="sticky-search-wrapper shadow p-2">
+<!-- <div class="sticky-search-wrapper shadow p-2">
   <div class="sticky-search">
     <mat-form-field color="primary" floatLabel="never">
       <mat-icon matPrefix class="input-icon">search</mat-icon>
@@ -98,5 +98,5 @@
     </mat-form-field>
     <button mat-flat-button color="primary">Tìm kiếm</button>
   </div>
-</div>
+</div> -->
 <!-- HEADER END -->

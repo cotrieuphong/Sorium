@@ -31,6 +31,7 @@
         <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
         <p *ngIf="!isLoading">Đăng nhập</p>
       </button>
+      <button mat-button type="button" (click)="resendConfirm()" *ngIf="resend">Gửi lại email</button>
       <div class="actions">
         <a routerLink="/quen-mat-khau">Quên mật khẩu?</a>
         <p>Chưa có tài khoản? <a routerLink="/dang-ky">Tạo mới</a></p>

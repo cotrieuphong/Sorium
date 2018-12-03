@@ -1,3 +1,15 @@
-<p>
-  province works!
-</p>
+<app-header></app-header>
+
+<div class="row no-gutters province-wrapper">
+  <h3>Danh sách các điểm đến</h3>
+  <div class="col-12 col-md-12 m-auto province-content">
+
+    <div class="province-item" *ngFor="let pro of allProvince" routerLink="/tinh-thanh/chi-tiet/{{pro.Id}}">
+      <img src="../../assets/img/ho-chi-minh.jpg" class="fluid-img">
+      <p>{{pro.ProvinceName}}</p>
+    </div>
+
+  </div>
+</div>
+
+<app-footer></app-footer>

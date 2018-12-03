@@ -1,17 +1,17 @@
 <app-header></app-header>
 
 <div class="row no-gutters p-5 profile-wrapper">
-  <div class="col-12 col-md-3 px-1">
+  <div class="col-12 col-lg-3 px-1">
     <div class="user-profile p-2">
       <div class="user-avatar my-3">
-        <img src="../../assets/img/ha-noi.jpg" alt="">
+        <img src="https://luxuria-api.azurewebsites.net{{userInfo?.UserAvatar}}" alt="">
       </div>
       <div class="user-info">
-        <p class="text-center">Cồ Triệu Phong</p>
+        <p class="text-center">{{userInfo?.FirstName}} {{userInfo?.LastName}}</p>
       </div>
     </div>
   </div>
-  <div class="col-12 col-md-9 px-1">
+  <div class="col-12 col-lg-9 px-1 personal">
     <mat-tab-group>
       <mat-tab>
         <ng-template mat-tab-label>
@@ -56,19 +56,6 @@
         <button mat-flat-button>Đặt phòng ngay</button>
       </mat-tab>
 
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon class="example-tab-icon">email</mat-icon>
-          <span matBadgeOverlap="false" matBadge="3" matBadgePosition="after" matBadgeSize="medium" matBadgeColor="primary">Hộp thư</span>
-        </ng-template>
-        <mat-list>
-          <button mat-button>Chào mừng!</button>
-          <mat-divider></mat-divider>
-          <button mat-button>Chào mừng!</button>
-          <mat-divider></mat-divider>
-          <button mat-button>Chào mừng!</button>
-        </mat-list>
-      </mat-tab>
     </mat-tab-group>
   </div>
 </div>

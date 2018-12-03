@@ -16,6 +16,8 @@ import { ProvinceComponent } from './province/province.component';
 import { ProvinceDetailComponent } from './province/province-detail/province-detail.component';
 import { SignupConfirmComponent } from './signup/signup-confirm/signup-confirm.component';
 import { ForgotPwComponent } from './signin/forgot-pw/forgot-pw.component';
+import { OwnerConfirmComponent } from './owner/owner-confirm/owner-confirm.component';
+import { ForgotFormComponent } from './signin/forgot-form/forgot-form.component';
 const routes: Routes = [
   {
     path: '', component: HomeComponent
@@ -24,13 +26,13 @@ const routes: Routes = [
     path: 'ket-qua', component: ResultComponent
   },
   {
-    path: 'ket-qua/:kq', component: ResultComponent
-  },
-  {
     path: 'dang-nhap', component: SigninComponent,
   },
   {
     path: 'quen-mat-khau', component: ForgotPwComponent
+  },
+  {
+    path: 'doi-mat-khau', component: ForgotFormComponent
   },
   {
     path: 'dang-ky', component: SignupComponent,
@@ -49,6 +51,11 @@ const routes: Routes = [
     canActivate: [UserGuard]
   },
   {
+    path: 'xac-nhan-chu-khach-san',
+    component: OwnerConfirmComponent,
+    canActivate: [UserGuard]
+  },
+  {
     path: 'thanh-toan', component: PaymentComponent
   },
   {
@@ -56,6 +63,9 @@ const routes: Routes = [
   },
   {
     path: 'tinh-thanh', component: ProvinceComponent
+  },
+  {
+    path: 'tinh-thanh/chi-tiet/:id', component: ProvinceDetailComponent
   },
   {
     path: '**', component: ErrorComponent
@@ -66,6 +76,7 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {
       scrollPositionRestoration: 'enabled',
       anchorScrolling: 'enabled',
+      useHash: true
     })],
   exports: [RouterModule]
 })

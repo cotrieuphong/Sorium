@@ -1,3 +1,67 @@
-<p>
-  province-detail works!
-</p>
+<app-header></app-header>
+
+<div class="loading-screen" [hidden]="!loadingScreen">
+  <div class="sk-cube-grid">
+    <div class="sk-cube sk-cube1"></div>
+    <div class="sk-cube sk-cube2"></div>
+    <div class="sk-cube sk-cube3"></div>
+    <div class="sk-cube sk-cube4"></div>
+    <div class="sk-cube sk-cube5"></div>
+    <div class="sk-cube sk-cube6"></div>
+    <div class="sk-cube sk-cube7"></div>
+    <div class="sk-cube sk-cube8"></div>
+    <div class="sk-cube sk-cube9"></div>
+  </div>
+</div>
+
+<div class="row no-gutters">
+  <div class="col-10 m-auto search-result">
+    <h3 class="text-center py-5">{{provinceName}}</h3>
+    <ng-masonry-grid
+      [masonryOptions]="masonryOpt"
+      [useAnimation]="true"
+      [useImagesLoaded]="true"
+      [scrollAnimationOptions]="{ animationEffect: 'effect-4', minDuration : 0.4, maxDuration : 0.7 }">
+    <!-- Masonry Grid Item -->
+      <ng-masonry-grid-item id="{{'masonry-item-'+i}}" *ngFor="let hotel of hotels; let i = index;">
+        <mat-card class="search-item">
+          <div class="search-content">
+            <div mat-card-image>
+              <img src="https://luxuria-api.azurewebsites.net{{hotel.Avatar}}">
+              <div class="tag-icon-wrapper">
+                <div class="tag-icon">
+                  <button mat-icon-button *ngFor="let service of hotel.Services" matTooltipPosition="right" matTooltipClass="tooltip-bg"  matTooltip="{{service?.mota}}"><mat-icon fontSet="fa" class="fa-icon" fontIcon="{{service?.icon}}"></mat-icon></button>
+                </div>
+              </div>
+              <div class="info">
+                <h4>Giới thiệu</h4>
+                <p innerHTML>{{hotel.Description}}</p>
+              </div>
+              <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+            </div>
+            <mat-card-header>
+              <mat-card-title (click)="selectHotel(hotel.Id)">{{hotel.Name}}</mat-card-title>
+              <mat-card-subtitle>
+                <nz-rate nzDisabled nzAllowHalf [ngModel]="hotel.Stars"></nz-rate>
+                <p><mat-icon matPrefix>location_on</mat-icon>{{hotel.Address}}, {{hotel.DistrictName}}, {{hotel.ProvinceName}}</p>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="tag-text">
+                <button mat-stroked-button *ngFor="let t of hotel.Tags" color="primary">{{t}}</button>
+              </div>
+            </mat-card-content>
+            <mat-card-actions>
+
+              <p>Chỉ từ {{hotel.MinPrice}}/ đêm</p>
+              <button mat-flat-button color="primary" (click)="selectHotel(hotel.Id)">Đặt phòng</button>
+
+            </mat-card-actions>
+          </div>
+        </mat-card>
+      </ng-masonry-grid-item>
+    </ng-masonry-grid>
+  </div>
+</div>
+
+<app-footer></app-footer>

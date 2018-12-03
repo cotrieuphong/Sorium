@@ -5,8 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { UserGuard } from './_guards/user.guard';
-import { JwtInterceptor } from './_helpers/jwt.interceptor';
-import { ErrorInterceptor } from './_helpers/error.interceptor'
 import { AuthenticationService } from './_services/authentication.service';
 import { UserService } from './_services/user.service';
 import { HotelService } from './_services/hotel.service';
@@ -20,6 +18,7 @@ import { setTheme } from 'ngx-bootstrap/utils';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { RatingModule } from 'ngx-bootstrap/rating';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgMasonryGridModule } from 'ng-masonry-grid';
 import { GalleryModule } from  '@ngx-gallery/core';
 import { LightboxModule } from  '@ngx-gallery/lightbox';
 import { GallerizeModule } from  '@ngx-gallery/gallerize';
@@ -39,6 +38,8 @@ import { ProvinceComponent } from './province/province.component';
 import { ProvinceDetailComponent } from './province/province-detail/province-detail.component';
 import { SignupConfirmComponent } from './signup/signup-confirm/signup-confirm.component';
 import { ForgotPwComponent } from './signin/forgot-pw/forgot-pw.component';
+import { OwnerConfirmComponent } from './owner/owner-confirm/owner-confirm.component';
+import { ForgotFormComponent } from './signin/forgot-form/forgot-form.component';
 
 registerLocaleData(en);
 @NgModule({
@@ -59,6 +60,8 @@ registerLocaleData(en);
     ProvinceDetailComponent,
     SignupConfirmComponent,
     ForgotPwComponent,
+    OwnerConfirmComponent,
+    ForgotFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +72,7 @@ registerLocaleData(en);
     SlickCarouselModule,
     MaterialModule,
     FormsModule,
+    NgMasonryGridModule,
     BsDatepickerModule.forRoot(),
     RatingModule.forRoot(),
     ReactiveFormsModule,
