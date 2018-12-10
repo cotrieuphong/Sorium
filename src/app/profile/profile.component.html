@@ -4,33 +4,58 @@
   <div class="col-12 col-lg-3 px-1">
     <div class="user-profile p-2">
       <div class="user-avatar my-3">
-        <img src="https://luxuria-api.azurewebsites.net{{userInfo?.UserAvatar}}" alt="">
+        <img class="userAvatar" src="{{userInfo.UserAvatar ? 'https://luxuria-api.azurewebsites.net' + userInfo.UserAvatar : './../../assets/img/user.png'}}" alt="">
       </div>
       <div class="user-info">
-        <p class="text-center">{{userInfo?.FirstName}} {{userInfo?.LastName}}</p>
+        <h3 class="text-center">{{userInfo.FirstName}} {{userInfo.LastName}}</h3>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="actions">
+        <button mat-button color="primary" class="upload-btn"><mat-icon matPrefix>camera_alt</mat-icon>
+        <input id="img-upload" (change)="avatarUpload($event)" type="file" class="file-upload" accept="image/jpeg, image/png, image/jpg"><label for="img-upload">Thay ảnh đại diện</label></button>
+        <button mat-button color="primary" routerLink="/"><mat-icon matPrefix>home</mat-icon>Đặt phòng</button>
+        <button mat-button color="primary"><mat-icon matPrefix>meeting_room</mat-icon>Đăng xuất</button>
       </div>
     </div>
   </div>
   <div class="col-12 col-lg-9 px-1 personal">
-    <mat-tab-group>
+    <mat-tab-group mat-tabs [selectedIndex]="0">
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon class="example-tab-icon">account_circle</mat-icon>
           Hồ sơ của tôi
         </ng-template>
         <mat-accordion multi="true" class="personal-info">
-          <mat-expansion-panel>
+          <mat-expansion-panel expanded="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 Thông tin cá nhân
               </mat-panel-title>
               <mat-panel-description>
-                Họ tên, tuổi và địa chỉ của bạn
+                Họ tên, Email và Địa chỉ của bạn
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <p>Họ tên: Cồ Triệu Phong</p>
-            <p>Tuổi: 23</p>
-            <p>Địa chỉ: 1047 - Đê La Thành</p>
+            <form [formGroup]="userForm" class="user-form" (ngSubmit)="updateInfo()">
+              <mat-form-field class="userFN">
+                <input formControlName="FirstName" matInput placeholder="Họ" [readonly]="isRead">
+              </mat-form-field>
+              <mat-form-field class="userLN">
+                <input formControlName="LastName" matInput placeholder="Tên" [readonly]="isRead">
+              </mat-form-field>
+              <mat-form-field class="user-email">
+                <input formControlName="Email" matInput placeholder="Email" [readonly]="isRead">
+              </mat-form-field>
+              <mat-form-field class="user-phone">
+                <input formControlName="PhoneNumber" matInput placeholder="Số điện thoại" [readonly]="isRead">
+              </mat-form-field>
+              <mat-form-field class="user-address">
+                <input formControlName="Address" matInput placeholder="Địa chỉ" [readonly]="isRead">
+              </mat-form-field>
+              <div class="actions text-center">
+                <button mat-flat-button type="button" (click)="update()" class="mr-1">{{isRead? 'Sửa thông tin' : 'Hủy'}}</button>
+                <button mat-stroked-button type="submit" color="primary" *ngIf="!isRead" [disabled]="userForm.invalid">Lưu</button>
+              </div>
+            </form>
           </mat-expansion-panel>
           <mat-expansion-panel>
             <mat-expansion-panel-header>
@@ -38,11 +63,23 @@
                 Bảo mật
               </mat-panel-title>
               <mat-panel-description>
-                Mật khẩu và Email của bạn
+                Đổi mật khẩu
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <p>Email: cotrieuphong@gmail.com</p>
-            <p>Mật khẩu: **********</p>
+            <form [formGroup]="pwForm" class="pw-form" (ngSubmit)="changePassword()">
+              <mat-form-field class="old-pw" *ngIf="isChange">
+                <input matInput formControlName="OldPassword" placeholder="Mật khẩu cũ" [type]="hide ? 'password' : 'text'">
+                <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </mat-form-field>
+              <mat-form-field class="new-pw" *ngIf="isChange">
+                <input matInput formControlName="NewPassword" placeholder="Mật khẩu mới" [type]="hide ? 'password' : 'text'">
+                <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </mat-form-field>
+              <div class="actions text-center">
+                <button mat-flat-button type="button" (click)="changePw()" class="mr-1">{{!isChange? 'Đổi mật khẩu' : 'Hủy'}}</button>
+                <button mat-stroked-button type="submit" color="primary" *ngIf="isChange" [disabled]="pwForm.invalid">Đổi</button>
+              </div>
+            </form>
           </mat-expansion-panel>
         </mat-accordion>
       </mat-tab>

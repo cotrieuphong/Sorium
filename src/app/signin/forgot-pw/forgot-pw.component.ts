@@ -29,7 +29,7 @@ export class ForgotPwComponent implements OnInit {
         Validators.required,
         Validators.email
       ]],
-      UrlForm: window.location.origin + '%23/doi-mat-khau'
+      UrlForm: window.location.origin + '/#/doi-mat-khau'
     });
   }
 

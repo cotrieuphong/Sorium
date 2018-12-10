@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, AfterViewInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { HotelService } from '../_services/hotel.service';
 import { ProvinceService } from '../_services/province.service';
 import { map, startWith, debounceTime, first } from 'rxjs/operators';
+import { MatPaginator } from '@angular/material';
+import {PageEvent} from '@angular/material';
 import { Observable } from 'rxjs';
 import * as $ from 'jquery';
-import { Masonry, MasonryGridItem } from 'ng-masonry-grid'
 
 export interface City {
   Id: number;
   ProvinceCode: string;
   ProvinceName: string;
 }
-
 
 @Component({
   selector: 'app-result',
@@ -22,7 +22,7 @@ export interface City {
   encapsulation: ViewEncapsulation.None
 })
 export class ResultComponent implements OnInit {
-
+  // Masonry
   masonryOpt = {
     itemSelector: '.search-item',
     gutter: 16,
@@ -30,20 +30,28 @@ export class ResultComponent implements OnInit {
     percentPosition: true,
     stagger: 30
   }
+  // Paginator
+  total;
+  length;
+  pageSize = 12;
+  pageEvent: PageEvent;
+  pageSizeOptions: number[] = [6, 12, 24, 48];
+  showHotel: any = [];
+  // Hotel
   status = false;
-  hotels = [];
-  tags;
-  services;
+  hotels:any = [];
+  tags:any = [];
+  services:any = [];
   stars;
   price;
   curency;
   getPaging;
-  navigationExtra: NavigationExtras
+  navigationExtra: NavigationExtras;
   isLoading = false;
   loadingScreen = true;
   notFound = false;
   public location: string;
-  public locationId: number;
+  public locationCode: string;
   public checkin: any;
   public checkout: any;
   public people: number;
@@ -51,7 +59,6 @@ export class ResultComponent implements OnInit {
 
   // Date Range Picker
   bsConfig={
-    dateInputFormat: 'DD-MM-YYYY',
     containerClass: 'theme-dark-blue'
   }
   minDate = new Date();
@@ -65,7 +72,9 @@ export class ResultComponent implements OnInit {
   searchForm: FormGroup;
   submitData: any;
   pplCount: number;
-
+  range;
+  dr;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -74,40 +83,46 @@ export class ResultComponent implements OnInit {
     private fb: FormBuilder) {
     this.activatedRoute.queryParams.subscribe(params => {
       this.location = params["location"];
-      this.locationId = params["locationId"]
+      this.locationCode = params["locationCode"]
       this.people = params["people"];
-      this.checkin = params["checkin"];
-      this.checkout = params["checkout"];
-      this.day = params["day"]
+      this.checkin = new Date(params["checkin"]);
+      this.checkout = new Date(params["checkout"]);
+      this.day = parseInt(params["day"]);
     });
-    console.log(this.location, this.checkin, this.checkout);
     this.minDate.getDate;
     // Autocomplete
     this.searchKeyControl = new FormControl();
     // Search Form
-    this.submitData = '';
     this.pplCount = 1;
+
   }
 
   ngOnInit() {
+    // Paginator
+    this.paginator._intl.itemsPerPageLabel = 'Khách sạn';
+    this.paginator._intl.getRangeLabel = (page: number, pageSize: number, length: number) => { if (length == 0 || pageSize == 0) { return `0 trên ${length}`; } length = Math.max(length, 0); const startIndex = page * pageSize; const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize; return `${startIndex + 1} - ${endIndex} trên ${length}`; }
 
     // Search Form
     this.searchForm = this.fb.group({
       searchLocation: '',
-      searchDate: '',
+      searchDate: [],
       peopleCount: 1,
       dayDiff: 1
     });
 
-    if(this.location == ''){
-      this.searchForm.get('searchLocation').patchValue(this.location);
-      console.log(this.searchForm.get('searchLocation').value)
+    let cityItem:City ={
+      Id: null,
+      ProvinceCode: this.locationCode,
+      ProvinceName: this.location
     }
-    this.searchForm.get('searchLocation').patchValue(this.location);
-    this.searchForm.get('searchDate').setValue([this.checkin, this.checkout]);
+
+    if(this.location == ''){
+      this.searchForm.get('searchLocation').setValue(cityItem);
+    }
+    this.searchForm.get('searchDate').setValue([this.checkin,this.checkout]);
+    console.log(this.searchForm.get('searchDate').value)
     this.searchForm.get('peopleCount').setValue(this.people);
     this.searchForm.get('dayDiff').setValue(this.day);
-
 
     // Autocomplete
     this.provinceService.getProvince().subscribe((res:any) => {
@@ -119,34 +134,162 @@ export class ResultComponent implements OnInit {
       )
     })
 
-    // Get Hotel
-    if(this.location == ''){
-      this.getPaging = {
-        PageSize: 20,
-        PageIndex: 1
-      }
-    }else{
-      this.getPaging = {
-        PageSize: 20,
-        PageIndex: 1,
-        FilterRules: [
-          {
-            field: "ProvinceCode",
-            op: "=",
-            value: this.locationId
-          },
-          {
-            field: "Adults",
-            op: ">",
-            value: this.people - 1
-          }
-        ]
+    // Paging
+    this.getPaging = {
+      PageSize: 999999,
+      PageIndex: 1,
+      FilterRules: [
+        {
+          field: "MaxAdults",
+          op: "greater",
+          value: this.people - 1
+        }
+      ],
+      SortRules: []
+    }
+    this.getHotel()
+
+    // Jquery
+    $(function(){
+
+      $('.search-filter mat-form-field').click(function(){
+        $(this).find('input').focus();
+        $('.search-overlay').addClass('show');
+        $('body').addClass('no-scroll');
+      });
+
+      $('.search-peoples').click(function(){
+        $('.people-count').addClass('show')
+      });
+
+      $('.search-peoples').siblings().click(function(){
+        $('.people-count').removeClass('show');
+      })
+
+      $('.search-overlay').click(function(){
+        $(this).removeClass('show');
+        $('.people-count').removeClass('show');
+        $('body').removeClass('no-scroll');
+      });
+
+      $('.search-filter').submit(function(){
+        $('body').removeClass('no-scroll');
+        $('.search-overlay').removeClass('show');
+      })
+
+      $('.prevent-input').keydown(function(e) {
+        e.preventDefault();
+        e.stopPropagation()
+      });
+    })
+
+  }
+
+  // Paginator
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+      this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+    }
+
+  getPage(e):any{
+    let firstCut = e.pageIndex * e.pageSize;
+    let secondCut = firstCut + e.pageSize;
+    this.showHotel = this.hotels.slice(firstCut,secondCut);
+  }
+
+  // Search
+
+  tagSearch(tag){
+    this.getPaging = {
+      PageSize: 999999,
+      PageIndex: 1,
+      FilterRules: [
+        {
+          field: "Tags",
+          op: "contains",
+          value: tag
+        },
+        {
+          field: "MaxAdults",
+          op: "greater",
+          value: this.people - 1
+        }
+      ]
+    }
+    this.getHotel(this.getPaging);
+  }
+
+  serviceSearch(service){
+    this.getPaging = {
+      PageSize: 999999,
+      PageIndex: 1,
+      FilterRules: [
+        {
+          field: "Services",
+          op: "contains",
+          value: service
+        },
+        {
+          field: "MaxAdults",
+          op: "greater",
+          value: this.people - 1
+        }
+      ]
+    }
+    this.getHotel(this.getPaging);
+  }
+
+  private getHotel(paging?){
+    if(!paging){
+      if(!this.location){
+        paging = this.getPaging = {
+          PageSize: 999999,
+          PageIndex: 1,
+          FilterRule: [
+            {
+              field: 'Status',
+              op: '=',
+              value: 1
+            },
+            {
+              field: "MaxAdults",
+              op: "greater",
+              value: this.people - 1
+            }
+          ]
+        }
+      }else{
+        paging = this.getPaging = {
+          PageSize: 999999,
+          PageIndex: 1,
+          FilterRules: [
+            {
+              field: 'Status',
+              op: '=',
+              value: 1
+            },
+            {
+              field: "ProvinceCode",
+              op: "=",
+              value: this.locationCode
+            },
+            {
+              field: "MaxAdults",
+              op: "greater",
+              value: this.people
+            }
+          ]
+        }
       }
     }
-    this.hotelService.getHotel(this.getPaging).subscribe(async(res:any) => {
+    this.loadingScreen = true;
+    this.notFound = false;
+    this.hotelService.getHotel(paging).subscribe((res:any) => {
+      this.total = res.TotalRecords;
       if(!res.DataList.length){
         this.notFound = true;
       }
+      this.length = res.TotalRecords;
+      console.log(res);
       let n = res.DataList.length;
       for(let i = 0; i < n ; i++){
         if(res.DataList[i].Services){
@@ -155,6 +298,13 @@ export class ResultComponent implements OnInit {
         }
         if(res.DataList[i].Tags){
           this.tags = (res.DataList[i].Tags).split(",");
+          let m = this.tags.length;
+          if(m < 5){
+            this.tags.length = m;
+          }else{
+            this.tags.length = 4
+          }
+
           res.DataList[i].Tags = this.tags;
         }
         if(res.DataList[i].Stars){
@@ -165,52 +315,25 @@ export class ResultComponent implements OnInit {
         res.DataList[i].MinPrice = this.price;
       }
       this.hotels = res.DataList;
-      if(await this.hotels){
-        setTimeout(() => {
-          this.loadingScreen = false;
-        }, 3000)
-      }
-      console.log(this.hotels);
-      $(function(){
-        $('mat-form-field').click(function(){
-          $(this).find('input').focus();
-          $('.search-overlay').addClass('show');
-          $('body').addClass('no-scroll');
-        });
-
-        $('.search-peoples').click(function(){
-          $('.people-count').addClass('show')
-        });
-
-        $('.search-peoples').siblings().click(function(){
-          $('.people-count').removeClass('show');
+      this.showHotel = this.hotels.slice(0,this.pageSize)
+      setTimeout(() => {
+        $('.trigger').click(function(){
+          $(this).toggleClass('show');
+          $(this).parent().find('.info').toggleClass('show');
         })
-
-        $('.search-overlay').click(function(){
-          $(this).removeClass('show');
-          $('.people-count').removeClass('show');
-          $('body').removeClass('no-scroll');
-        });
-
-        $('.search-form').submit(function(){
-          $('body').removeClass('no-scroll');
-          $('.search-overlay').removeClass('show');
-        })
-
-        $('.prevent-input').keypress(function(e) {
-          e.preventDefault();
-        });
-      })
+        this.isLoading = false;
+        this.loadingScreen = false;
+      },1000)
     })
-  }
+  };
 
   get searchLocation() {
     return this.searchForm.get('searchLocation')
   };
 
-  get searchDate() {
-    return this.searchForm.get('searchDate')
-  };
+  // get searchDate() {
+  //   return this.searchForm.get('searchDate')
+  // };
 
   change_alias(alias) {
     var str = alias;
@@ -268,18 +391,6 @@ export class ResultComponent implements OnInit {
     this.searchForm.get('peopleCount').setValue(this.pplCount)
   }
 
-  toggle() {
-
-    const trigger = document.querySelector(".trigger");
-    const parent = document.querySelector(".info");
-    trigger.classList.toggle('show');
-    parent.classList.toggle('show');
-    console.log(trigger, parent);
-        // $(this).toggleClass('show');
-        // $(this).parent().find('.info').toggleClass('show')
-
-  }
-
   selectHotel(id){
     let navigationExtras : NavigationExtras = {
       queryParams: {
@@ -294,50 +405,104 @@ export class ResultComponent implements OnInit {
     this.router.navigate(['/chi-tiet'], navigationExtras);
   }
 
+  suggest() {
+    this.getPaging = {
+      PageSize: 999999,
+      PageIndex: 1,
+      FilterRules: [
+        {
+          field: "MaxAdults",
+          op: "greater",
+          value: this.people - 1
+        }
+      ]
+    }
+    this.getHotel(this.getPaging)
+  }
+
   priceDown() {
     this.getPaging = {
-      PageSize: 2,
+      PageSize: 12,
       PageIndex: 1,
+      FilterRules: [
+        {
+          field: "MaxAdults",
+          op: "greater",
+          value: this.people - 1
+        }
+      ],
+      SortRules: [
+        {
+          field: "MinPrice",
+          value: "DESC"
+        }
+      ]
     }
-    this.hotelService.getHotel(this.getPaging).subscribe(async(res:any) => {
-      console.log(res)
-    })
+    this.getHotel(this.getPaging)
+  }
+
+  priceUp() {
+
+    this.getPaging = {
+      PageSize: 12,
+      PageIndex: 1,
+      FilterRules: [
+        {
+          field: "MaxAdults",
+          op: "greater",
+          value: this.people - 1
+        }
+      ],
+      SortRules: [
+        {
+          field: "MinPrice",
+          value: "ASC"
+        }
+      ]
+    }
+    this.getHotel(this.getPaging)
   }
 
   submit() {
+
     this.isLoading = true;
-    if(this.searchForm.get('searchDate').value == ''){
-      this.searchForm.get('searchDate').setValue([this.minDate, this.minDay])
-    }
-    if(this.searchForm.get('peopleCount').value == null){
-      this.searchForm.get('peopleCount').setValue(1)
-    }
     this.submitData = this.searchForm.value;
     console.log(this.submitData);
     let  day1 = this.submitData.searchDate[0].getTime();
     let  day2 = this.submitData.searchDate[1].getTime();
     let  dd = Math.abs(day1 - day2);
     this.submitData.dayDiff = Math.round(dd/(1000*60*60*24));
-    let navigationExtras : NavigationExtras = {
-      queryParams: {
-        "location": this.submitData.searchLocation.ProvinceName,
-        "locationId": this.submitData.searchLocation.ProvinceCode,
-        "checkin": this.submitData.searchDate[0].toJSON().split('T')[0],
-        "checkout": this.submitData.searchDate[1].toJSON().split('T')[0],
-        "people": this.submitData.peopleCount,
-        "day": this.submitData.dayDiff
-      }
+
+    let data = this.searchForm.get('searchLocation').value
+    if(data.location == ''){
+      this.getHotel()
     }
-    setTimeout(() => {
-      this.router.navigate(['/ket-qua'], navigationExtras);
-      this.isLoading = false
-    }, 1000)
+    this.getPaging = {
+      PageSize: 999999,
+      PageIndex: 1,
+      FilterRules: [
+        {
+          field: "ProvinceCode",
+          op: "=",
+          value: data.ProvinceCode
+        },
+        {
+          field: 'Status',
+          op: '=',
+          value: 1
+        },
+        {
+          field: "MaxAdults",
+          op: "greater",
+          value: data.people - 1
+        }
+      ]
+    }
+    this.getHotel(this.getPaging)
   }
 
   ngAfterViewInit() {
-    // setTimeout(() => {
-    //   this.loadingScreen = false;
-    // }, 2000)
+
   }
 
 }

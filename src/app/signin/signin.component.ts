@@ -80,8 +80,8 @@ export class SigninComponent implements OnInit {
         this.id = sessionStorage.getItem('Id');
         this.resendOTP = {
           Id: this.id,
-          SucRedirectUrl: window.location.origin + '%23/dang-nhap',
-          FailRedirectUrl: window.location.origin + '%23/dang-ky'
+          SucRedirectUrl: window.location.origin + '/%23/dang-nhap',
+          FailRedirectUrl: window.location.origin + '/%23/dang-ky'
         }
         self.resend = true;
         self.nz.create('error', 'Lỗi', 'Chưa xác nhận email', {

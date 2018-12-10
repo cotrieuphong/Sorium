@@ -13,9 +13,9 @@ import {MatMenuTrigger} from '@angular/material';
 })
 export class HeaderComponent implements OnInit {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-  tokenKey;
+  tokenKey: String;
   isLoggedin = false;
-  userInfo;
+  userInfo:any = [];
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
@@ -23,16 +23,17 @@ export class HeaderComponent implements OnInit {
     private nz: NzNotificationService) {
     this.tokenKey = localStorage.getItem('tokenKey');
     if(this.tokenKey){
-      this.userService.getUser(this.tokenKey).subscribe((res:any) => {
-        if(!res.Data.UserAvatar){
-          res.Data.UserAvatar = './../../assets/img/user.png'
+      this.userService.getUser(this.tokenKey).subscribe((res:any)=>{
+        if (!res.Succeeded){
+          localStorage.removeItem('tokenKey');
+        } else {
+            if(!res.Data.UserAvatar){
+              res.Data.UserAvatar = './../../assets/img/user.png'
+            }
+            this.userInfo = res.Data;
+            this.isLoggedin = true;
         }
-        this.userInfo = res.Data;
-        this.isLoggedin = true;
-      },
-      error => {
       });
-
     }
   }
 

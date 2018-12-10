@@ -4,7 +4,7 @@ import { HotelService } from '../_services/hotel.service';
 import { ProvinceService } from '../_services/province.service';
 import { Observable } from 'rxjs';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
-import { map, startWith, debounceTime} from 'rxjs/operators';
+import { map, startWith, debounceTime, switchMap} from 'rxjs/operators';
 import * as $ from 'jquery';
 
 export interface City {
@@ -24,11 +24,11 @@ export class HomeComponent implements OnInit {
 
   // Date Range Picker
   bsConfig={
-    dateInputFormat: 'DD-MM-YYYY',
     containerClass: 'theme-dark-blue'
   }
   minDate = new Date();
   minDay = new Date();
+
   // Autocomplete
   searchKeyControl: FormControl;
   citys: City[] = [];
@@ -44,31 +44,9 @@ export class HomeComponent implements OnInit {
   provinceLoad = false;
   cityLoad = false;
   hotelLoad = false;
-  cmtLoad = true;
+  cmtLoad = false;
   // Comment
-  comments = [
-    {
-      hotelName: "Khách sạn Sydney Boulevard",
-      hotelLocation: "Hà Nội",
-      description: "Giá phòng Executive hướng thành phố trên Sorium rất phải chăng. Đúng là một món hời!",
-      user: "Cồ Triệu Phong",
-      userLocation: "Đà Nẵng"
-    },
-    {
-      hotelName: "Khách sạn Eucalyptus",
-      hotelLocation: "Hải Phòng",
-      description: "Chúng tôi đã đặt phòng ở khách sạn Eucalyptus qua Sorium sau khi xem qua rất nhiều đánh giá hữu ích. Nhờ đó giúp chúng tôi đưa ra quyết định tốt nhất thật dễ dàng khi du lịch đến Hải Phòng.",
-      user: "Vũ Minh Hiếu",
-      userLocation: "Bắc Ninh"
-    },
-    {
-      hotelName: "Khách sạn Granvia Kyoto",
-      hotelLocation: "Hồ Chí Minh",
-      description: "Gia đình chúng tôi vừa đi tàu tốc hành qua các thành phố ở Nhật Bản cùng nhiều hành lý nên vị trí của khách sạn này thật thuận tiện cho chúng tôi. Giá phòng trên Agoda cũng rất tuyệt vời.",
-      user: "Lê Quanh Minh",
-      userLocation: "Hà Nội"
-    }
-  ]
+  comments:any = [];
 
   // Get Paging
   hotelPaging;
@@ -133,9 +111,15 @@ export class HomeComponent implements OnInit {
       });
       this.hotelLoad = true;
       if(this.provinceLoad == true && this.cityLoad == true && this.hotelLoad == true && this.cmtLoad == true){
-        this.loadingContent = false;
+        setTimeout(() => this.loadingContent = false,1000)
       }
     });
+
+    // Comment
+    this.hotelService.getTop3().subscribe((res:any) => {
+      this.comments = res.DataList;
+      this.cmtLoad = true
+    })
 
     // Get Province Paging
     this.provincePaging = {
@@ -152,6 +136,7 @@ export class HomeComponent implements OnInit {
       }
 
     });
+
 
 
     // Jquery
@@ -280,7 +265,6 @@ export class HomeComponent implements OnInit {
       this.searchForm.get('peopleCount').setValue(1)
     }
     this.submitData = this.searchForm.value;
-    console.log(this.submitData);
     let  day1 = this.submitData.searchDate[0].getTime();
     let  day2 = this.submitData.searchDate[1].getTime();
     let  dd = Math.abs(day1 - day2);
@@ -288,11 +272,11 @@ export class HomeComponent implements OnInit {
     let navigationExtras : NavigationExtras = {
       queryParams: {
         "location": this.submitData.searchLocation.ProvinceName,
-        "locationId": this.submitData.searchLocation.ProvinceCode,
-        "checkin": this.submitData.searchDate[0].toJSON().split('T')[0],
-        "checkout": this.submitData.searchDate[1].toJSON().split('T')[0],
+        "locationCode": this.submitData.searchLocation.ProvinceCode,
+        "checkin": this.submitData.searchDate[0].toLocaleDateString(),
+        "checkout": this.submitData.searchDate[1].toLocaleDateString(),
         "people": this.submitData.peopleCount,
-        "day": this.submitData.dayDiff
+        "day": this.submitData.dayDiff,
       }
     }
     setTimeout(() => {

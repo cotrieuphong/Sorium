@@ -1,17 +1,7 @@
 <app-header></app-header>
 
 <div class="loading-screen" [hidden]="!loadingContent">
-  <div class="sk-cube-grid">
-    <div class="sk-cube sk-cube1"></div>
-    <div class="sk-cube sk-cube2"></div>
-    <div class="sk-cube sk-cube3"></div>
-    <div class="sk-cube sk-cube4"></div>
-    <div class="sk-cube sk-cube5"></div>
-    <div class="sk-cube sk-cube6"></div>
-    <div class="sk-cube sk-cube7"></div>
-    <div class="sk-cube sk-cube8"></div>
-    <div class="sk-cube sk-cube9"></div>
-  </div>
+  <div class="spinner"></div>
 </div>
 
 <div class="row no-gutters home-wrapper">
@@ -32,7 +22,7 @@
                   <!-- {{ searchForm.value | json }} -->
                   <mat-form-field class="search-key col-12 shadow" color="primary">
                     <mat-icon matPrefix>search</mat-icon>
-                    <mat-label>Nhập điểm du lịch hoặc tên khách sạn</mat-label>
+                    <mat-label>Nhập điểm du lịch</mat-label>
                     <input matInput
                     placeholder="Ví dụ: Hà Nội" formControlName="searchLocation"
                     [matAutocomplete]="auto">
@@ -55,6 +45,18 @@
                     [bsConfig]="bsConfig" bsDaterangepicker autocomplete="off"
                     formControlName="searchDate" placeholder="Bạn muốn đi du lịch trong bao lâu">
                   </mat-form-field>
+
+                  <!-- <mat-form-field class="checkin" (click)="checkin.open()">
+                    <input matInput formControlName="checkin" [min]="minDate" [max]="maxDate" (click)="checkin.open()" [matDatepicker]="checkin" placeholder="Chọn ngày đến" autocomplete="off" class="prevent-input">
+                    <mat-icon matPrefix><mat-icon class="arrow-icon" matPrefix>arrow_right_alt</mat-icon>date_range</mat-icon>
+                    <mat-datepicker #checkin></mat-datepicker>
+                  </mat-form-field>
+
+                  <mat-form-field class="checkout" (click)="checkout.open()">
+                    <input matInput formControlName="checkout" [min]="minDate" [max]="maxDate" (click)="checkout.open()" [matDatepicker]="checkout" placeholder="Chọn ngày đi" autocomplete="off" class="prevent-input">
+                    <mat-icon matPrefix><mat-icon class="arrow-icon" matPrefix>arrow_right_alt</mat-icon>date_range</mat-icon>
+                    <mat-datepicker #checkout></mat-datepicker>
+                  </mat-form-field> -->
 
                   <mat-form-field class="search-peoples col-12 col-md-8 shadow" (click)="setPpl()">
                     <mat-icon matPrefix>people</mat-icon>
@@ -157,10 +159,10 @@
       <div class="rumor-bg row no-gutters">
         <div class="col-12 col-lg-4 rumor" *ngFor="let cm of comments">
           <div class="rumor-item">
-            <h3 routerLink="/chi-tiet">{{cm.hotelName}}</h3>
-            <h5>ở {{cm.hotelLocation}}</h5>
-            <p>{{cm.description}}</p>
-            <h5>- {{cm.user}} ở {{cm.userLocation}}</h5>
+            <h3 routerLink="/chi-tiet">{{cm.HotelName}}</h3>
+            <h5>ở {{cm.HotelAddress}}, {{cm.HotelDistrictName}}, {{cm.HotelProvinceName}}</h5>
+            <p>{{cm.Content}}</p>
+            <h5>- {{cm.FullName}} ở {{cm.UserProvinceName}}</h5>
           </div>
         </div>
       </div>

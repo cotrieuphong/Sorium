@@ -1,0 +1,82 @@
+@import "../../../scss/variables.scss";
+
+@font-face{
+  font-family: Playful;
+  src: url(../../../assets/font/PlaylistScript.otf);
+}
+
+.signup-confirm-wrapper{
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ff5f6d, #ffc371);
+  display: flex;
+  .signup-content{
+    margin: auto;
+    width: 90%;
+    max-width: 1000px;
+    overflow: hidden;
+    border-radius: 2px;
+    .signup-confirm{
+      padding: 1rem;
+      background: $cl-white;
+      text-align: center;
+      .top-logo{
+        img{
+          width: 15rem;
+          margin: auto;
+          cursor: pointer;
+        }
+      }
+      h3{
+        font-size: 1.6rem;
+        color: $cl-primary;
+        margin-bottom: .5rem;
+        margin-top: 5rem;
+      }
+      p{
+        margin-bottom: .5rem;
+      }
+      button{
+        margin-bottom: 5rem;
+      }
+      @media (max-width: 767px){
+        button{
+          width: 100%;
+        }
+      }
+    }
+    .ads-box{
+      align-items: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364) center no-repeat;
+      background-size: cover;
+      position: relative;
+      a{
+        margin: auto;
+        font-family: Playful;
+        font-size: 3.5rem;
+        color: #fff;
+        z-index: 200;
+        text-decoration: none;
+      }
+      img{
+        position: absolute;
+        display: block;
+        content: '';
+        top: 50%;
+        right: 0;
+        height: 200%;
+        animation: spin 100s linear infinite;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0%{
+    transform: translate(75%, -50%) rotate(0deg)
+  }
+  100%{
+    transform: translate(75%, -50%) rotate(360deg)
+  }
+}

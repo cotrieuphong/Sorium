@@ -1,17 +1,7 @@
 <app-header></app-header>
 
 <div class="loading-screen" [hidden]="!loadingScreen">
-  <div class="sk-cube-grid">
-    <div class="sk-cube sk-cube1"></div>
-    <div class="sk-cube sk-cube2"></div>
-    <div class="sk-cube sk-cube3"></div>
-    <div class="sk-cube sk-cube4"></div>
-    <div class="sk-cube sk-cube5"></div>
-    <div class="sk-cube sk-cube6"></div>
-    <div class="sk-cube sk-cube7"></div>
-    <div class="sk-cube sk-cube8"></div>
-    <div class="sk-cube sk-cube9"></div>
-  </div>
+  <div class="spinner"></div>
 </div>
 
 <nz-anchor [nzOffsetTop]="0" [nzAffix]="true" [nzShowInkInFixed]="false">
@@ -45,13 +35,13 @@
       <div class="ha-content sm-shadow">
         <h2 class="hotel-title">{{hotel.Name}}</h2>
         <div class="hotel-subtitle">
-          <nz-rate nzDisabled nzAllowHalf [ngModel]="hotel.Star"></nz-rate>
+          <nz-rate nzDisabled nzAllowHalf [ngModel]="hotel.Stars"></nz-rate>
           <mat-icon matPrefix>location_on</mat-icon>
           <p>{{hotel.Address}}, {{hotel.DistrictName}}, {{hotel.ProvinceName}}</p>
         </div>
         <mat-divider class="my-2"></mat-divider>
         <div class="hotel-tag">
-          <button mat-button *ngFor="let service of hotel.Services"><mat-icon fontSet="fa" class="fa-icon" fontIcon="{{service?.icon}}"></mat-icon><p>{{service?.mota}}</p></button>
+          <button mat-button *ngFor="let service of hotel.Services"><mat-icon fontSet="fa" class="fa-icon" fontIcon="{{service?.icon}}"></mat-icon><p>{{service?.ten}}</p></button>
         </div>
         <mat-divider class="my-2"></mat-divider>
         <div class="hotel-description">
@@ -66,15 +56,24 @@
     <div class="hr-item sm-shadow" *ngFor="let r of hotel.ListRoom">
       <div class="item-avatar">
         <img src="https://luxuria-api.azurewebsites.net{{r.Avatar}}" class="fluid-img">
+        <div class="tag-icon-wrapper">
+          <div class="tag-icon">
+            <button mat-icon-button *ngFor="let service of r.Services" matTooltipPosition="right" matTooltipClass="tooltip-bg"  matTooltip="{{service?.ten}}"><mat-icon fontSet="fa" class="fa-icon" fontIcon="{{service?.icon}}"></mat-icon></button>
+          </div>
+        </div>
       </div>
       <div class="item-info">
-        <h3 class="room-title" (click)="selectRoom(r.Id)">{{r.Description}}</h3>
+        <h3 class="room-title" (click)="selectRoom(r.Id)">{{r.Name}}</h3>
         <p><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-home" matPrefix></mat-icon>Diện tích {{r.Acreage}}m<sup>2</sup></p>
+        <p><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-male" matPrefix></mat-icon>Người lớn {{r.Adults}}</p>
+        <p><mat-icon fontSet="fa" class="fa-icon" fontIcon="fa-child" matPrefix></mat-icon>Trẻ em {{r.Children}}</p>
         <p *ngFor="let tag of r.info"><mat-icon fontSet="fa" class="fa-icon" fontIcon="{{tag.icon}}" matPrefix></mat-icon>{{tag.description}}</p>
       </div>
       <div class="item-price">
-        <p>{{r.Price}} đ/đêm</p>
-        <button mat-flat-button (click)="selectRoom(r.Id)">Đặt phòng</button>
+        <p [hidden]="!r.RoomStatus">{{r.Price}} đ/đêm</p>
+        <button mat-flat-button (click)="selectRoom(r.Id)" [hidden]="!r.RoomStatus">{{r.RoomStatus? 'Đặt phòng' : 'Hết phòng'}}
+        </button>
+        <img [hidden]="r.RoomStatus" src="../../assets/img/het-phong.png" alt="" *ngIf="!r.RoomStatus">
       </div>
     </div>
 
@@ -96,33 +95,129 @@
   <div id="compare" class="col-12 col-md-10 m-auto hotel hotel-compare">
     <h2 class="hotel-title mb-4">So sánh</h2>
     <div class="hc-content row no-gutters">
-      <div class="hc-item1 col-4">
-        <div class="item-avatar">
-          <img src="../../assets/img/ha-noi.jpg" class="fluid-img">
+      <div class="hc-item item-1 col-12 col-md-4">
+        <div class="item-content">
+          <div class="item-avatar">
+            <img src="../../assets/img/ha-noi.jpg" class="fluid-img">
+          </div>
+          <h3>{{hotel.Name}}</h3>
+
+          <div class="item-child">
+            <p *ngFor="let r of hotel.ListRoom">{{r.Name}} - {{r.Price}} đ/đêm</p>
+          </div>
         </div>
-        <h3>{{hotel.Name}}</h3>
-        <p>{{hotel.Price}} đ/đêm</p>
       </div>
-      <div class="hc-item2 col-4">
-        <button mat-stroked-button color="primary"> Thêm khách sạn</button>
+      <div class="hc-item item-2 col-12 col-md-4">
+        <div class="item-content">
+          <button mat-stroked-button [hidden]="FirstHotelPick" color="primary" class="m-auto" (click)="FirstModal(); getHotelByProvince(hotel.ProvinceCode)"> Thêm khách sạn</button>
+          <div [hidden]="!FirstHotelPick" class="hotel-pick">
+            <mat-icon (click)="removeFirstPick()">close</mat-icon>
+            <div class="item-avatar">
+              <img src="https://luxuria-api.azurewebsites.net{{FirstCompare.Avatar}}" class="fluid-img">
+            </div>
+            <h3>{{FirstCompare.Name}}</h3>
+
+            <div class="item-child">
+              <p *ngFor="let r of FirstCompare.ListRoom">{{r.Name}} - {{r.Price}} đ/đêm</p>
+            </div>
+          </div>
+          <nz-modal [(nzVisible)]="FirstVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="FirstCancel()">
+            <ng-template #modalTitle>
+              <p>Các khách sạn cùng khu vực: <strong class="ml-1">{{hotel.ProvinceName}}</strong></p>
+              <mat-icon (click)="FirstCancel()">close</mat-icon>
+            </ng-template>
+
+            <ng-template #modalContent>
+              <mat-spinner class="m-auto" diameter="25" *ngIf="loadingHotel"></mat-spinner>
+              <div *ngIf="!loadingHotel">
+                <div class="select-item" *ngFor="let h of showHotel" (click)="FirstCancel(); FirstHotel(h.Id)">
+                  <div class="avatar">
+                    <img src="https://luxuria-api.azurewebsites.net{{h.Avatar}}" class="fluid-img">
+                  </div>
+                  <p>{{h.Name}}</p>
+                </div>
+                <mat-paginator [length]="length" [pageSize]="pageSize"
+                  (page)="pageEvent = getPage($event)">
+                </mat-paginator>
+              </div>
+            </ng-template>
+
+            <ng-template #modalFooter>
+              <button mat-flat-button color="primary" (click)="FirstCancel()">Hủy</button>
+            </ng-template>
+          </nz-modal>
+        </div>
       </div>
-      <div class="hc-item3 col-4">
-        <button mat-stroked-button color="primary"> Thêm khách sạn</button>
+      <div class="hc-item item-3 col-12 d-md-block col-md-4">
+        <div class="item-content">
+
+          <button mat-stroked-button [hidden]="SecondHotelPick" color="primary" class="m-auto" (click)="SecondModal(); getHotelByProvince2(hotel.ProvinceCode)"> Thêm khách sạn</button>
+          <div [hidden]="!SecondHotelPick" class="hotel-pick">
+            <mat-icon (click)="removeSecondPick()">close</mat-icon>
+            <div class="item-avatar">
+              <img src="https://luxuria-api.azurewebsites.net{{SecondCompare.Avatar}}" class="fluid-img">
+            </div>
+            <h3>{{SecondCompare.Name}}</h3>
+
+            <div class="item-child">
+              <p *ngFor="let r of SecondCompare.ListRoom">{{r.Name}} - {{r.Price}} đ/đêm</p>
+            </div>
+          </div>
+          <nz-modal [(nzVisible)]="SecondVisible" [nzTitle]="modalTitle2" [nzContent]="modalContent2" [nzFooter]="modalFooter2" (nzOnCancel)="SecondCancel()">
+            <ng-template #modalTitle2>
+              <p>Các khách sạn cùng khu vực: <strong class="ml-1">{{hotel.ProvinceName}}</strong></p>
+              <mat-icon (click)="SecondCancel()">close</mat-icon>
+            </ng-template>
+
+            <ng-template #modalContent2>
+              <mat-spinner diameter="25" class="m-auto" *ngIf="loadingHotel"></mat-spinner>
+              <div *ngIf="!loadingHotel">
+                <div class="select-item" *ngFor="let h of showHotel2" (click)="SecondCancel(); SecondHotel(h.Id)">
+                  <div class="avatar">
+                    <img src="https://luxuria-api.azurewebsites.net{{h.Avatar}}" class="fluid-img">
+                  </div>
+                  <p>{{h.Name}}</p>
+                </div>
+                <mat-paginator [length]="length2" [pageSize]="pageSize"
+                  (page)="pageEvent = getPage2($event)">
+                </mat-paginator>
+              </div>
+            </ng-template>
+
+            <ng-template #modalFooter2>
+              <button mat-flat-button color="primary" (click)="SecondCancel()">Hủy</button>
+            </ng-template>
+          </nz-modal>
+        </div>
       </div>
     </div>
   </div>
   <div id="comment" class="col-12 col-md-10 m-auto hotel hotel-comment">
     <h2 class="hotel-title mb-4">Đánh giá</h2>
-    <div class="hcm-content sm-shadow">
+    <form [formGroup]="fbForm" class="feed-back" [hidden]="!token" (ngSubmit)="postCmt()">
+      <mat-form-field>
+        <textarea #feedback formControlName="Content" maxlength="256" matInput placeholder="Để lại đánh giá của bạn về khách sạn"></textarea>
+        <mat-hint align="end">{{Content.value.length}}/256</mat-hint>
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit" [disabled]="!Content.value"><mat-spinner diameter="20" color="white" [hidden]="!isLoading"></mat-spinner><mat-icon [hidden]="isLoading">send</mat-icon></button>
+    </form>
+    <p class="text-center py-2" [hidden]="!cmt.value">Khách sạn này chưa có đánh giá nào !<p>
+    <div class="hcm-content">
       <mat-list>
-        <mat-list-item>Bình luận</mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>Bình luận</mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>Bình luận</mat-list-item>
+        <mat-list-item *ngFor="let cm of cmt">
+          <div class="user">
+            <div class="avatar">
+              <img src="https://luxuria-api.azurewebsites.net{{cm.UserAvatar}}" class="fluid-img">
+            </div>
+            <p>{{cm.UserName}}</p>
+          </div>
+          <div class="comment sm-shadow">
+            <button mat-icon-button class="delete-cmt" *ngIf="cm.UserId == userId" (click)="deleteConfirm(cm.Id)"><mat-icon>close</mat-icon></button>
+            <p>" {{cm.Content}} "</p>
+          </div>
+        </mat-list-item>
       </mat-list>
     </div>
   </div>
 </div>
-
 <app-footer></app-footer>

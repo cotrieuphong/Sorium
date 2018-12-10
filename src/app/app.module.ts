@@ -10,13 +10,11 @@ import { UserService } from './_services/user.service';
 import { HotelService } from './_services/hotel.service';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { AppComponent } from './app.component';
-import { IonRangeSliderModule } from "ng2-ion-range-slider";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../material';
 import { NgZorroAntdModule, NZ_I18N, en_US} from 'ng-zorro-antd';
 import { setTheme } from 'ngx-bootstrap/utils';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { RatingModule } from 'ngx-bootstrap/rating';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgMasonryGridModule } from 'ng-masonry-grid';
 import { GalleryModule } from  '@ngx-gallery/core';
@@ -40,7 +38,14 @@ import { SignupConfirmComponent } from './signup/signup-confirm/signup-confirm.c
 import { ForgotPwComponent } from './signin/forgot-pw/forgot-pw.component';
 import { OwnerConfirmComponent } from './owner/owner-confirm/owner-confirm.component';
 import { ForgotFormComponent } from './signin/forgot-form/forgot-form.component';
-
+import { PolicyComponent } from './common/policy/policy.component';
+import { TermComponent } from './common/term/term.component';
+import { QuestionComponent } from './common/question/question.component';
+import { JobComponent } from './common/job/job.component';
+import { ContactComponent } from './common/contact/contact.component';
+import { PartnerComponent } from './common/partner/partner.component';
+import { PaymentConfirmComponent } from './payment/payment-confirm/payment-confirm.component';
+import {MAT_DATE_LOCALE} from '@angular/material/core';
 registerLocaleData(en);
 @NgModule({
   declarations: [
@@ -62,6 +67,14 @@ registerLocaleData(en);
     ForgotPwComponent,
     OwnerConfirmComponent,
     ForgotFormComponent,
+    PolicyComponent,
+    TermComponent,
+    QuestionComponent,
+    JobComponent,
+    ContactComponent,
+    PartnerComponent,
+    PaymentConfirmComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -74,9 +87,7 @@ registerLocaleData(en);
     FormsModule,
     NgMasonryGridModule,
     BsDatepickerModule.forRoot(),
-    RatingModule.forRoot(),
     ReactiveFormsModule,
-    IonRangeSliderModule,
     NgZorroAntdModule,
     FontAwesomeModule,
     GalleryModule.forRoot({thumb: false}),
@@ -92,7 +103,8 @@ registerLocaleData(en);
     HotelService,
     // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     // { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: NZ_I18N, useValue: en_US }
+    { provide: NZ_I18N, useValue: en_US },
+    {provide: MAT_DATE_LOCALE, useValue: 'vi-VI'},
   ],
   bootstrap: [AppComponent],
 })

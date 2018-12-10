@@ -15,27 +15,50 @@ export class ForgotFormComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private userService: UserService,
+    private nz: NzNotificationService
   ) { }
 
   ngOnInit() {
     let id = this.route.snapshot.queryParamMap.get('Token');
     console.log(id);
     this.pwForm = this.fb.group({
-      Email: ['', [
-        Validators.required,
-        Validators.email
+      NewPassword: ['', [
+        Validators.required
       ]],
-      UrlForm: window.location.origin + '%23/doi-mat-khau'
+      ConfirmPassword: ['',[
+        Validators.required
+      ]],
+      UrlForm: window.location.origin + '/#/doi-mat-khau'
     });
   }
 
-  get Email() {
-    return this.pwForm.get('Email')
+  get NewPassword() {
+    return this.pwForm.get('NewPassword')
+  }
+  get ConfirmPassword() {
+    return this.pwForm.get('ConfirmPassword')
   }
 
   forgetPw() {
-
+    let data = this.pwForm.value;
+    this.userService.updatePw(data).subscribe((res:any) => {
+      this.nz.create('success', 'Thành công', 'Cập nhật thông tin thành công', {
+        nzDuration: 2500,
+        nzAnimate: true,
+        nzPauseOnHover: true
+      });
+      setTimeout(() => {
+        this.router.navigate(['/dang-nhap']);
+      },1000)
+    },error => {
+      this.nz.create('error', 'Lỗi', 'Không cập nhật được thông tin', {
+        nzDuration: 2500,
+        nzAnimate: true,
+        nzPauseOnHover: true
+      })
+    })
   }
 
 }

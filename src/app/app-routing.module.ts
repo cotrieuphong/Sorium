@@ -18,6 +18,13 @@ import { SignupConfirmComponent } from './signup/signup-confirm/signup-confirm.c
 import { ForgotPwComponent } from './signin/forgot-pw/forgot-pw.component';
 import { OwnerConfirmComponent } from './owner/owner-confirm/owner-confirm.component';
 import { ForgotFormComponent } from './signin/forgot-form/forgot-form.component';
+import { PolicyComponent } from './common/policy/policy.component';
+import { TermComponent } from './common/term/term.component';
+import { QuestionComponent } from './common/question/question.component';
+import { JobComponent } from './common/job/job.component';
+import { ContactComponent } from './common/contact/contact.component';
+import { PartnerComponent } from './common/partner/partner.component';
+import { PaymentConfirmComponent } from './payment/payment-confirm/payment-confirm.component';
 const routes: Routes = [
   {
     path: '', component: HomeComponent
@@ -56,7 +63,12 @@ const routes: Routes = [
     canActivate: [UserGuard]
   },
   {
-    path: 'thanh-toan', component: PaymentComponent
+    path: 'thanh-toan',
+    component: PaymentComponent
+  },
+  {
+    path: 'xac-nhan-dat-phong',
+    component: PaymentConfirmComponent
   },
   {
     path: 'chi-tiet', component: DetailComponent
@@ -68,8 +80,27 @@ const routes: Routes = [
     path: 'tinh-thanh/chi-tiet/:id', component: ProvinceDetailComponent
   },
   {
+    path: 'cau-hoi', component: QuestionComponent
+  },
+  {
+    path: 'chinh-sach', component: PolicyComponent
+  },
+  {
+    path: 'dieu-khoan', component: TermComponent
+  },
+  {
+    path: 'tuyen-dung', component: JobComponent
+  },
+  {
+    path: 'lien-he', component: ContactComponent
+  },
+  {
+    path: 'doi-tac', component: PartnerComponent
+  },
+  {
     path: '**', component: ErrorComponent
   }
+
 ];
 
 @NgModule({

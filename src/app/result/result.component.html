@@ -1,19 +1,5 @@
 <app-header></app-header>
 
-<div class="loading-screen" [hidden]="!loadingScreen">
-  <div class="sk-cube-grid">
-    <div class="sk-cube sk-cube1"></div>
-    <div class="sk-cube sk-cube2"></div>
-    <div class="sk-cube sk-cube3"></div>
-    <div class="sk-cube sk-cube4"></div>
-    <div class="sk-cube sk-cube5"></div>
-    <div class="sk-cube sk-cube6"></div>
-    <div class="sk-cube sk-cube7"></div>
-    <div class="sk-cube sk-cube8"></div>
-    <div class="sk-cube sk-cube9"></div>
-  </div>
-</div>
-
 <div class="row no-gutters result-page-wrapper">
 
   <div class="col-12 col-lg-3 px-2 filter-wrapper">
@@ -21,11 +7,11 @@
     <form class="search-filter shadow" [formGroup]="searchForm" (ngSubmit)="submit()">
       <mat-form-field class="search-key col-12" color="primary">
         <mat-icon matPrefix>search</mat-icon>
-        <mat-label>Nhập điểm du lịch hoặc tên khách sạn</mat-label>
+        <mat-label>Nhập điểm du lịch</mat-label>
         <input matInput
         placeholder="Ví dụ: Hà Nội" formControlName="searchLocation"
         [matAutocomplete]="auto">
-        <button mat-button matSuffix mat-icon-button type="button" (click)="resetInput()" *ngIf="searchLocation.value">
+        <button mat-button matSuffix mat-icon-button type="button" (click)="resetInput()" [hidden]="!searchLocation.value">
           <mat-icon>close</mat-icon>
         </button>
         <mat-autocomplete #auto="matAutocomplete"
@@ -36,11 +22,10 @@
            </mat-option>
          </mat-autocomplete>
       </mat-form-field>
-
       <mat-form-field class="search-date col-12" color="primary" (click)="drp.show()">
         <mat-icon matPrefix (click)="drp.toggle()">date_range</mat-icon>
         <input matInput class="form-control prevent-input" #drp="bsDaterangepicker" placement="bottom left"
-        [minDate]="minDate"
+        [minDate]="minDate" aria-required="true" aria-invalid="false"
         [bsConfig]="bsConfig" bsDaterangepicker autocomplete="off"
         formControlName="searchDate" placeholder="Bạn muốn đi du lịch trong bao lâu">
       </mat-form-field>
@@ -71,69 +56,67 @@
     <div class="search-overlay"></div>
   </div>
   <div class="col-12 col-lg-9 px-2 m-auto result-wrapper">
-
+    <div class="loading-content" [hidden]="!loadingScreen">
+      <div class="loader">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+    </div>
     <div class="search-result-filter">
+      <p>Tìm thấy {{total}} kết quả</p>
       <p class="mr-2 ml-auto">Sắp xếp giá theo</p>
       <mat-button-toggle-group #group="matButtonToggleGroup" value="suggest">
-        <mat-button-toggle value="suggest" matTooltipClass="tooltip-bg" matTooltip="Gợi ý">
+        <mat-button-toggle value="suggest" (click)="suggest()" matTooltipClass="tooltip-bg" matTooltip="Gợi ý">
           <mat-icon>thumb_up</mat-icon>
         </mat-button-toggle>
         <mat-button-toggle value="down" matTooltipClass="tooltip-bg" (click)="priceDown()" matTooltip="Từ cao xuống thấp">
           <mat-icon>trending_down</mat-icon>
         </mat-button-toggle>
-        <mat-button-toggle value="up" matTooltipClass="tooltip-bg" matTooltip="Từ thấp lên cao">
+        <mat-button-toggle value="up" (click)="priceUp()" matTooltipClass="tooltip-bg" matTooltip="Từ thấp lên cao">
           <mat-icon>trending_up</mat-icon>
         </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
-
+    <h3 [hidden]="!notFound" class="text-center">Không tìm thấy khách sạn.</h3>
     <div class="search-result">
-      <h3 *ngIf="notFound">Không tìm thấy khách sạn.</h3>
-      <ng-masonry-grid
-        [masonryOptions]="masonryOpt"
-        [useAnimation]="true"
-        [useImagesLoaded]="true"
-        [scrollAnimationOptions]="{ animationEffect: 'effect-4', minDuration : 0.4, maxDuration : 0.7 }">
-      <!-- Masonry Grid Item -->
-      <ng-masonry-grid-item id="{{'masonry-item-'+i}}" *ngFor="let hotel of hotels; let i = index;">
-        <mat-card class="search-item">
-          <div class="search-content">
-            <div mat-card-image>
-              <img src="https://luxuria-api.azurewebsites.net{{hotel.Avatar}}">
-              <div class="tag-icon-wrapper">
-                <div class="tag-icon">
-                  <button mat-icon-button *ngFor="let service of hotel.Services" matTooltipPosition="right" matTooltipClass="tooltip-bg"  matTooltip="{{service?.mota}}"><mat-icon fontSet="fa" class="fa-icon" fontIcon="{{service?.icon}}"></mat-icon></button>
-                </div>
-              </div>
-              <div class="info">
-                <h4>Giới thiệu</h4>
-                <p innerHTML>{{hotel.Description}}</p>
-              </div>
-              <mat-icon class="trigger" (click)="toggle()">keyboard_arrow_up</mat-icon>
+      <mat-card class="search-item" *ngFor="let hotel of showHotel">
+        <div mat-card-image>
+          <img src="https://luxuria-api.azurewebsites.net{{hotel.Avatar}}">
+          <div class="tag-icon-wrapper">
+            <div class="tag-icon">
+              <button mat-icon-button *ngFor="let service of hotel.Services" matTooltipPosition="right" matTooltipClass="tooltip-bg"  matTooltip="{{service?.ten}}" (click)="serviceSearch(service?.icon)"><mat-icon fontSet="fa" class="fa-icon" fontIcon="{{service?.icon}}"></mat-icon></button>
             </div>
-            <mat-card-header>
-              <mat-card-title (click)="selectHotel(hotel.Id)">{{hotel.Name}}</mat-card-title>
-              <mat-card-subtitle>
-                <nz-rate nzDisabled nzAllowHalf [ngModel]="hotel.Stars"></nz-rate>
-                <p><mat-icon matPrefix>location_on</mat-icon>{{hotel.Address}}, {{hotel.DistrictName}}, {{hotel.ProvinceName}}</p>
-              </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="tag-text">
-                <button mat-stroked-button *ngFor="let t of hotel.Tags" color="primary">{{t}}</button>
-              </div>
-            </mat-card-content>
-            <mat-card-actions>
-
-              <p>Chỉ từ {{hotel.MinPrice}}/ đêm</p>
-              <button mat-flat-button color="primary" (click)="selectHotel(hotel.Id)">Đặt phòng</button>
-
-            </mat-card-actions>
           </div>
-        </mat-card>
-      </ng-masonry-grid-item>
-    </ng-masonry-grid>
+          <div class="info">
+            <h4>Giới thiệu</h4>
+            <p [innerHTML]="hotel.Description"></p>
+          </div>
+          <mat-icon class="trigger">keyboard_arrow_up</mat-icon>
+        </div>
+        <mat-card-header>
+          <mat-card-title (click)="selectHotel(hotel.Id)">{{hotel.Name}}</mat-card-title>
+          <mat-card-subtitle>
+            <nz-rate nzDisabled nzAllowHalf [ngModel]="hotel.Stars"></nz-rate>
+            <p><mat-icon matPrefix>location_on</mat-icon>{{hotel.Address}}, {{hotel.DistrictName}}, {{hotel.ProvinceName}}</p>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="tag-text">
+            <button mat-stroked-button *ngFor="let t of hotel.Tags" color="primary" (click)="tagSearch(t)">{{t}}</button>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-flat-button color="primary" (click)="selectHotel(hotel.Id)"><mat-icon matPrefix>room_service</mat-icon>Đặt phòng chỉ từ {{hotel.MinPrice}}/đêm</button>
+        </mat-card-actions>
+      </mat-card>
     </div>
+    <mat-paginator [length]="length"
+              [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+              (page)="pageEvent = getPage($event)">
+    </mat-paginator>
   </div>
 </div>
 <app-footer></app-footer>

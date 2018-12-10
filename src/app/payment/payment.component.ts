@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation, OnInit, AfterViewInit} from '@angular/cor
 import {FormControl, FormGroup, FormBuilder, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import { HotelService } from '../_services/hotel.service';
+import { UserService } from '../_services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd';
 import {map, startWith, debounceTime} from 'rxjs/operators';
@@ -16,6 +17,8 @@ export class PaymentComponent implements OnInit {
   firstForm: FormGroup;
   secondForm: FormGroup;
   isCompleted = false;
+  userInfo;
+  tokenKey;
   roomId;
   room;
   paging;
@@ -32,6 +35,7 @@ export class PaymentComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private hotelService: HotelService,
+    private userService: UserService,
     private activatedRoute: ActivatedRoute,
     private nz: NzNotificationService) {
       this.activatedRoute.queryParams.subscribe(params => {
@@ -43,6 +47,7 @@ export class PaymentComponent implements OnInit {
         this.hotel = params["hotel"];
         this.roomId = params["room"];
       });
+      this.tokenKey = localStorage.getItem('tokenKey');
     }
 
   ngOnInit() {
@@ -69,6 +74,22 @@ export class PaymentComponent implements OnInit {
       PNum: '',
       Description: ''
     })
+
+    if(this.tokenKey){
+      this.userService.getUser(this.tokenKey).subscribe((res:any)=>{
+        if (!res.Succeeded){
+          localStorage.removeItem('tokenKey');
+          this.router.navigate(['/'])
+        } else {
+            this.userInfo = res.Data;
+            this.firstForm.get('GuestName').setValue(this.userInfo.FirstName + ' ' + this.userInfo.LastName);
+            this.firstForm.get('GuestPhoneNumber').setValue(this.userInfo.PhoneNumber)
+            this.firstForm.get('GuestEmail').setValue(this.userInfo.Email)
+        }
+      });
+    }
+
+
 
     this.hotelService.getRoomById(this.roomId).subscribe((res:any) => {
       this.room = res.Data;
@@ -118,7 +139,7 @@ export class PaymentComponent implements OnInit {
     this.firstForm.get('PNum').setValue(this.people);
     let formData = {
       Order: '',
-      SucUrl: 'https://takajourei.github.io/Sorium/#/login',
+      SucUrl: window.location.origin +'%23/xac-nhan-dat-phong',
       FailUrl: window.location.href
     }
     formData.Order = this.firstForm.value;

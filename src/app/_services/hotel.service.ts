@@ -13,6 +13,15 @@ const httpOptions = {
 	})
 }
 
+const httpAuth = (token) => {
+	if(!token){
+		return new HttpHeaders({'Content-Type':  'application/json'})
+	}
+	return new HttpHeaders({
+		'Content-Type':  'application/json',
+		'TokenCode': localStorage.getItem('tokenKey')})
+}
+
 const httpAuthOptions = {
 	headers: new HttpHeaders({
 		'Content-Type':  'application/json',
@@ -47,6 +56,22 @@ export class HotelService {
 
 	sendOrder(formData) {
 		return this.http.post(this.soriumUrl + 'Order/Insert', formData, httpOptions)
+	}
+
+	getTop3() {
+		return this.http.get(this.soriumUrl + 'Comment/GetTop3', httpOptions)
+	}
+
+	getCmt(formData) {
+		return this.http.post(this.soriumUrl + 'Comment/GetPaging', formData, httpOptions)
+	}
+
+	postCmt(formData) {
+		return this.http.post(this.soriumUrl + 'Comment/Post', formData, httpAuthOptions)
+	}
+
+	deleteCmt(id) {
+		return this.http.delete(this.soriumUrl + 'Comment/Delete?Id=' + id, httpAuthOptions)
 	}
 
 }

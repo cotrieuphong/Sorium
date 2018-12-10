@@ -22,6 +22,12 @@ const httpAuthOptions = {
 	})
 }
 
+const httpAuth = {
+	headers: new HttpHeaders({
+		'TokenCode': localStorage.getItem('tokenKey'),
+	})
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -60,6 +66,22 @@ export class UserService {
 
 	forgotPw(formData) {
 		return this.http.post(this.soriumUrl + 'ACC/ForgetPassword', formData, httpOptions)
+	}
+
+	avatarUpload(formData): Observable<any> {
+		return this.http.post( this.soriumUrl + 'acc/uploadavatar', formData, httpAuth)
+	}
+
+	changePw(formData): Observable<any> {
+		return this.http.post( this.soriumUrl + 'acc/changepassword', formData, httpAuthOptions)
+	}
+
+	updatePw(formData): Observable<any> {
+		return this.http.post( this.soriumUrl + 'Acc/UpdatePassword', formData, httpOptions)
+	}
+
+	updateUser(formData): Observable<any> {
+		return this.http.post(this.soriumUrl + 'acc/updateinfo', formData, httpAuthOptions)
 	}
 
 }

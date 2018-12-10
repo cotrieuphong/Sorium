@@ -11,14 +11,14 @@
       </div>
       <h2 class="text-md-left text-center">Đặt lại mật khẩu</h2>
 
-      <mat-form-field>
-        <input matInput placeholder="Email" formControlName="Email">
-        <mat-hint align="end">Ví dụ: sorium@gmail.com</mat-hint>
-        <mat-error *ngIf="Email.invalid && Email.touched">
-          Email của bạn chưa đúng
-        </mat-error>
+      <mat-form-field class="old-pw">
+        <input matInput formControlName="NewPassword" placeholder="Mật khẩu mới" [type]="hide ? 'password' : 'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </mat-form-field>
-
+      <mat-form-field class="new-pw">
+        <input matInput formControlName="ConfirmPassword" placeholder="Xác nhận mật khẩu mới" [type]="hide ? 'password' : 'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </mat-form-field>
       <button mat-flat-button [disabled]="pwForm.invalid" type="submit">
         <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
         <p *ngIf="!isLoading">Xác nhận</p>

@@ -7,13 +7,14 @@
         </a>
         <div class="collapse-nav d-none d-md-flex">
           <a routerLink="/" mat-button class="ml-1">Đặt phòng</a>
-          <a routerLink="/chu-khach-san" mat-stroked-button color="primary" class="ml-auto">Trở thành chủ khách sạn</a>
+          <a routerLink="/chu-khach-san" mat-stroked-button color="primary" [hidden]="userInfo.RoleId > 1" class="ml-auto">Trở thành chủ khách sạn</a>
+          <a mat-stroked-button routerLink="admin.sorium.ga" class="ml-auto" color="primary" [hidden]="userInfo.RoleId == 1">Quản lý khách sạn</a>
           <a mat-button class="ml-1 login-btn" routerLink="/dang-nhap" *ngIf="!isLoggedin">Đăng nhập</a>
           <a mat-raised-button routerLink="/dang-ky" color="primary" class="ml-1 res-btn" *ngIf="!isLoggedin">Đăng ký</a>
           <button mat-button *ngIf="isLoggedin" [matMenuTriggerFor]="profile" class="ml-1 profile menu-btn">
             <div class="profile-icon">
               <div class="profile-img mr-1">
-                <img src="https://luxuria-api.azurewebsites.net{{userInfo.UserAvatar}}">
+                <img class="userAvatar" src="{{userInfo.UserAvatar ? 'https://luxuria-api.azurewebsites.net' + userInfo.UserAvatar : './../../assets/img/user.png'}}">
               </div>
               <p>{{userInfo.LastName}}</p>
             </div>
@@ -40,7 +41,7 @@
         <button mat-button *ngIf="isLoggedin" [matMenuTriggerFor]="profile" class="ml-auto profile menu-btn d-md-none">
           <div class="profile-icon">
             <div class="profile-img mr-1">
-              <img src="https://luxuria-api.azurewebsites.net{{userInfo.UserAvatar}}">
+              <img class="userAvatar" src="{{userInfo.UserAvatar ? 'https://luxuria-api.azurewebsites.net' + userInfo.UserAvatar : './../../assets/img/user.png'}}">
             </div>
             <p>{{userInfo.LastName}}</p>
           </div>

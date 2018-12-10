@@ -4,18 +4,62 @@
   background: #f9f9f9;
   .user-profile{
     width: 100%;
+    margin-bottom: 1rem;
     box-shadow:0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
     .user-avatar{
       width: 200px;
       height: 200px;
       margin: auto;
+      display: flex;
       border-radius: 50%;
-      overflow: hidden;
+      border: 2px solid $cl-primary;
       img{
-        width: 100%;
-        height: 100%;
+        margin: auto;
+        border-radius: 50%;
+        height: 98%;
+        width: 98%;
         object-fit: cover;
         object-position: center;
+      }
+    }
+    .user-info{
+      padding: .5rem 0;
+      h3{
+        font-size: 1.6rem;
+        font-weight: 500;
+        margin-bottom: 0;
+        &:hover{
+          color: $cl-primary;
+        }
+      }
+    }
+    .actions{
+      padding: .5rem 0;
+      button{
+        padding: 0 .25rem;
+        width: 100%;
+        text-align: left
+      }
+      .upload-btn{
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        height: 36px;
+        label{
+          width: 100%;
+          margin: 0;
+          cursor: pointer;
+        }
+        input{
+          position: absolute;
+          display: block;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          opacity: 0;
+          z-index: -1;
+        }
       }
     }
   }
@@ -32,10 +76,51 @@
 
     }
   }
-}
-
-.mat-accordion{
-  margin-top: 1rem;
+  .personal{
+    .user-form{
+      width: 100%;
+      display: flex;
+      flex-flow: row wrap;
+      .mat-form-field{
+        width: calc(50% - .5rem);
+      }
+      .userFN{
+        margin-right: 1rem;
+      }
+      .userLF{
+        margin-left: 1rem;
+      }
+      .user-phone, .user-address, .user-email{
+        width: 100%;
+      }
+      .actions{
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+      }
+    }
+    .pw-form{
+      width: 100%;
+      display: flex;
+      flex-flow: row wrap;
+      .mat-form-field{
+        width: calc(50% - .5rem);
+      }
+      .old-pw{
+        margin-right: .5rem;
+      }
+      .new-pw{
+        margin-left: .5rem;
+      }
+      .actions{
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+      }
+    }
+  }
 }
 
 mat-icon{

@@ -89,11 +89,68 @@
       }
       .search-date{
         width: 100%;
+        .mat-form-field-invalid{
+          background: $cl-primary;
+        }
         input{
           box-shadow: none;
           border: none;
           height: 18px;
           caret-color: transparent
+        }
+      }
+      .checkin{
+        width: calc(50% - .5rem);
+        margin-right: .5rem;
+        input{
+          box-shadow: none;
+          border: none;
+          height: 18px;
+          caret-color: transparent!important;
+          &:focus{
+            .mat-icon{
+              color: $cl-primary;
+            }
+          }
+
+        }
+        .mat-icon{
+          position: relative;
+
+          .arrow-icon{
+            position: absolute;
+            display: block;
+            font-size: 1rem!important;
+            top: 16px;
+            left: -2px;
+          }
+        }
+      }
+      .checkout{
+        width: calc(50% - .5rem);
+        margin-left: .5rem;
+        input{
+          box-shadow: none;
+          border: none;
+          height: 18px;
+          caret-color: transparent!important;
+          &:focus{
+            .mat-icon{
+              color: $cl-primary;
+            }
+          }
+
+        }
+        .mat-icon{
+          position: relative;
+
+          .arrow-icon{
+            position: absolute;
+            display: block;
+            font-size: 1rem!important;
+            top: 16px;
+            right: -2px;
+          }
         }
       }
       .search-peoples{
@@ -338,7 +395,7 @@
           }
           @media (max-width: 1199px){
             .new-hotel{
-              height: 18rem;
+              height: 20rem;
             }
           }
         }
@@ -663,7 +720,7 @@
 /* Spinkit */
 .loading-screen{
   position: fixed;
-  display: block;
+  display: flex;
   content: '';
   z-index: 1200;
   top: 0;
@@ -672,70 +729,31 @@
   height: 100%;
   background: linear-gradient(135deg, #ff5f6d, #ffc371);
 }
-.sk-cube-grid {
-  width: 50px;
-  height: 50px;
-  position: absolute;
-  display: block;
-  content: '';
-  top: 50%;
-  left: 50%;
-  transform: translate(-50px, -50%);
+.spinner {
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  margin: auto;
+  -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+  animation: sk-rotateplane 1.2s infinite ease-in-out;
 }
 
-.sk-cube-grid .sk-cube {
-  width: 33%;
-  height: 33%;
-  background-color: $cl-white;
-  float: left;
-  -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
-          animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
-}
-.sk-cube-grid .sk-cube1 {
-  -webkit-animation-delay: 0.2s;
-          animation-delay: 0.2s; }
-.sk-cube-grid .sk-cube2 {
-  -webkit-animation-delay: 0.3s;
-          animation-delay: 0.3s; }
-.sk-cube-grid .sk-cube3 {
-  -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s; }
-.sk-cube-grid .sk-cube4 {
-  -webkit-animation-delay: 0.1s;
-          animation-delay: 0.1s; }
-.sk-cube-grid .sk-cube5 {
-  -webkit-animation-delay: 0.2s;
-          animation-delay: 0.2s; }
-.sk-cube-grid .sk-cube6 {
-  -webkit-animation-delay: 0.3s;
-          animation-delay: 0.3s; }
-.sk-cube-grid .sk-cube7 {
-  -webkit-animation-delay: 0s;
-          animation-delay: 0s; }
-.sk-cube-grid .sk-cube8 {
-  -webkit-animation-delay: 0.1s;
-          animation-delay: 0.1s; }
-.sk-cube-grid .sk-cube9 {
-  -webkit-animation-delay: 0.2s;
-          animation-delay: 0.2s; }
-
-@-webkit-keyframes sk-cubeGridScaleDelay {
-  0%, 70%, 100% {
-    -webkit-transform: scale3D(1, 1, 1);
-            transform: scale3D(1, 1, 1);
-  } 35% {
-    -webkit-transform: scale3D(0, 0, 1);
-            transform: scale3D(0, 0, 1);
-  }
+@-webkit-keyframes sk-rotateplane {
+  0% { -webkit-transform: perspective(120px) }
+  50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+  100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
 }
 
-@keyframes sk-cubeGridScaleDelay {
-  0%, 70%, 100% {
-    -webkit-transform: scale3D(1, 1, 1);
-            transform: scale3D(1, 1, 1);
-  } 35% {
-    -webkit-transform: scale3D(0, 0, 1);
-            transform: scale3D(0, 0, 1);
+@keyframes sk-rotateplane {
+  0% {
+    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+  } 50% {
+    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+  } 100% {
+    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
   }
 }
 .theme-dark-blue .bs-datepicker-head{
